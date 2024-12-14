@@ -14,11 +14,15 @@
         exit();
     }
 
+    setcookie('user', $login, time() + 3600, "/"); // Устанавливаем cookie на час
+    header('Location: MainSite.php'); // Перенаправление на MainSite.html
+    exit(); 
+
     //$password = md5($password."qweqweqwe123");
 
     $mysql = new mysqli('localhost', 'root', '', 'balti24db');
     $mysql->query("INSERT INTO `users` (`login`,`name`,`pass`) VALUES('$login', '$name', '$password')");
     $mysql->close();
 
-    header('Location: /');
+    header('Location: MainSite.php');
 ?>

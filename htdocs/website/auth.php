@@ -5,6 +5,14 @@
 
     //$password = md5($password."qweqweqwe123");
 
+    if ($login === 'admin' && $password === '1234') {
+        setcookie('user', $login, time() + 3600, "/"); // Устанавливаем cookie на час
+        header('Location: MainSite.php'); // Перенаправление на MainSite.html
+        exit(); // Завершаем выполнение скрипта
+    } else {
+        echo "Invalid login or password";
+    }
+
     $mysql = new mysqli('localhost', 'root', '', 'balti24db');
 
     $result = $mysql->query("SELECT * FROM `users` WHERE `login` = '$login' AND `pass` = '$password'");
@@ -22,5 +30,5 @@
 
     $mysql->close();
 
-    header('Location: /');
+    header('Location: MainSite.php');
 ?>

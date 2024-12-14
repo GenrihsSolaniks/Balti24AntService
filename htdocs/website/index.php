@@ -1,3 +1,11 @@
+<?php
+if (isset($_COOKIE['user'])) {
+    // Если пользователь авторизован, покажем ему выбор
+    echo "<p>Hello, " . htmlspecialchars($_COOKIE['user']) . "!</p>";
+    echo "<p>You are already logged in. Go to <a href='MainSite.php'>Main Site</a> or <a href='exit.php'>Log out</a>.</p>";
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,30 +18,24 @@
 </head>
 <body>
     <div class="container mt-4">
-        <?php
-             if(isset($_COOKIE['user']) == false):
-        ?>
         <div class="row">
             <div class="col">
                 <h1>Registration form</h1>
                 <form action="check.php" method="post">
-                <input type="text" class = "form-control" name="login" id="login" placeholder="Enter your login" required><br>
-                <input type="text" class = "form-control" name="name" id="name" placeholder="Enter your name" required><br>
-                <input type="password" class = "form-control" name="password" id="password" placeholder="Enter your password" required><br>
-                <button class="btn btn-success" type="submit">Sign up</button>
+                    <input type="text" class="form-control" name="login" id="login" placeholder="Enter your login" required><br>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Enter your name" required><br>
+                    <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required><br>
+                    <button class="btn btn-success" type="submit">Sign up</button>
                 </form>
             </div>
             <div class="col">
-                <h1>Autorization</h1>
+                <h1>Authorization</h1>
                 <form action="auth.php" method="post">
-                <input type="text" class = "form-control" name="login" id="login" placeholder="Enter your login" required><br>
-                <input type="password" class = "form-control" name="password" id="password" placeholder="Enter your password" required><br>
-                <button class="btn btn-success" type="submit">Log in</button>
+                    <input type="text" class="form-control" name="login" id="login" placeholder="Enter your login" required><br>
+                    <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required><br>
+                    <button class="btn btn-success" type="submit">Log in</button>
                 </form>
-            </div>  
-            <?php else: ?>
-                <p>Hello <?=$_COOKIE['user']?>. To exit click <a href="exit.php">here</a>.</p>
-            <?php endif; ?>  
+            </div>
         </div>
     </div>
 </body>

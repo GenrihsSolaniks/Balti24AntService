@@ -1,0 +1,53 @@
+/* Установка фона сайта и цвета текста */
+body {
+    background-color: #ffffff; /* Белый фон */
+    color: #000000; /* Чёрный текст */
+}
+
+form {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+:root {
+    --primary-color: #1b6ec2;
+    --primary-hover-color: #145a99;
+    --primary-border-color: #1861ac;
+    --secondary-color: #258cfb;
+    --error-color: #e50000;
+    --success-color: #26b050;
+}
+
+a, .btn-link {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+a:hover, .btn-link:hover {
+    color: var(--primary-hover-color);
+    text-decoration: underline;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: var(--primary-color);
+    border-color: var(--primary-border-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover-color);
+    border-color: var(--primary-hover-color);
+}
+
+.app-container {
+    margin-top: 2rem;
+    padding: 2rem;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}

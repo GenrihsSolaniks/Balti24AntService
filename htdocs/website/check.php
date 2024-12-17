@@ -15,14 +15,22 @@
     }
 
     setcookie('user', $login, time() + 3600, "/"); // Устанавливаем cookie на час
-    header('Location: MainSite.php'); // Перенаправление на MainSite.html
-    exit(); 
+   /* header('Location: MainSite.php'); // Перенаправление на MainSite.html
+    exit(); */
 
-    //$password = md5($password."qweqweqwe123");
+    //$password = md5($password."qweqweqwe123");"INSERT INTO `users` (`login`,`name`,`pass`) VALUES('$login', '$name', '$password')
 
     $mysql = new mysqli('localhost', 'root', '', 'balti24db');
-    $mysql->query("INSERT INTO `users` (`login`,`name`,`pass`) VALUES('$login', '$name', '$password')");
-    $mysql->close();
+    if ($mysql->connect_error) {
+        die("Ошибка подключения: " . $mysql->connect_error);
+    }
+    
+    $query = "INSERT INTO `users` (`login`,`name`,`pass`)
+              VALUES('$login', '$name', '$password')";
+    
+    if (!$mysql->query($query)) {
+        die("Ошибка запроса: " . $mysql->error);
+    }
 
     header('Location: MainSite.php');
 ?>

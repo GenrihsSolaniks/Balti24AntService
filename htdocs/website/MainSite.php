@@ -15,59 +15,164 @@ if (!isset($_COOKIE['user'])) {
     <link rel="stylesheet" href="styleform.css">
 </head>
 <body>
-    <h1>Welcome, <?=htmlspecialchars($_COOKIE['user'])?>!</h1>
-    <p><a href="exit.php">Log out</a></p>
     <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-12">
-                <h1 class="text-center">Welcome to Balti24.com</h1>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <p class="text-center">Please specidy your order</p>
-            </div>
-        </div>
-        <form action="" method="post">
+        <h1 class="text-center">Welcome, <?=htmlspecialchars($_COOKIE['user'])?>!</h1>
+        <p class="text-center"><a href="exit.php" class="btn btn-link">Log out</a></p>
 
-            <select id="serviceArea" name="ServiceArea" class="form-control"><option value disabled>Please Select</option>
-                <option value="Cleaning">Cleaning</option>
-                <option value="Repair">Repair</option></select></div><br>
+        <div class="app-container">
+            <form action="order.php" method="post">
+                <div class="form-group mb-3">
+                    <label for="serviceArea">Select Service Area *</label>
+                    <select id="serviceArea" name="ServiceArea" class="form-control" required>
+                        <option value disabled selected>Please Select</option>
+                        <option value="Cleaning">Cleaning</option>
+                        <option value="Repair">Repair</option>
+                    </select>
+                </div>
 
-            <input type="text" class = "form-control" name="address" id="address" placeholder="Enter your address" required><br>
+                <div class="form-group mb-3">
+                    <input type="text" class="form-control" name="address" id="address" placeholder="Enter your address" required>
+                </div>
 
-            <input type="text" class = "form-control" name="city" id="city" placeholder="Enter your city" required><br>
+                <div class="form-group mb-3">
+                    <input type="text" class="form-control" name="city" id="city" placeholder="Enter your city" required>
+                </div>
 
-            <div class="form-group"><label for="country">Select Country *</label>
-            <select id="country" name="Country" class="form-control"><option value disabled>Please Select</option>
-                <option value="Germany">Latvia</option>
-                <option value="Latvia">Germany</option></select></div>
+                <div class="form-group mb-3">
+                    <label for="country">Select Country *</label>
+                    <select id="country" name="country" class="form-control" required>
+                        <option value disabled selected>Please Select</option>
+                        <option value="Latvia">Latvia</option>
+                        <option value="Germany">Germany</option>
+                    </select>
+                </div>
 
-            <div class="form-group"><label for="date">Select an Available Date *</label>
-                <input id="date" type="date" name="Date" class="form-control" value="" /></div> 
-                
-            <div class="form-group"><label for="taskDescription">Describe the Task *</label>
-                <textarea id="taskDescription" placeholder="Provide details about the task" name="TaskDescription" class="form-control"></textarea></div>    
+                <div class="form-group mb-3">
+                    <label for="date">Select an Available Date *</label>
+                    <input id="date" type="date" name="date" class="form-control" required>
+                </div>
 
-            <div class="form-group"><label for="date">Additional Details (optional)</label>
-            <input type="text" class = "form-control" name="details" id="details" placeholder="For example, access codes, parking, etc." required><br>
+                <div class="form-group mb-3">
+                    <label for="taskDescription">Describe the Task *</label>
+                    <textarea id="taskDescription" placeholder="Provide details about the task" name="taskDescription" class="form-control" required></textarea>
+                </div>
 
-            <<div class="form-group"><label>Attach a Photo</label>
-                <input class="form-control is-invalid" type="file" /></div>
-        
-            
-            <div class="form-group"><div><input id="agreement1" type="checkbox" name="orderModel.AgreeToTerms" class="valid" value="True" />
-                    <label for="agreement1">I accept the terms and conditions *</label></div>
-                <div><input id="agreement2" type="checkbox" name="orderModel.AgreeToRefundPolicy" class="valid" value="True" />
-                    <label for="agreement2">I accept the refund policy *</label></div></div>
+                <div class="form-group mb-3">
+                    <label for="details">Additional Details (optional)</label>
+                    <input type="text" class="form-control" name="details" id="details" placeholder="For example, access codes, parking, etc.">
+                </div>
 
-            <button class="btn btn-success" type="submit">Submit order</button>
+                <div class="form-group mb-3">
+                    <label for="file">Attach a Photo</label>
+                    <input id="file" type="file" class="form-control">
+                </div>
+
+                <div class="form-group mb-3">
+                    <div class="form-check">
+                        <input id="agreement1" type="checkbox" name="orderModel.AgreeToTerms" class="form-check-input" required>
+                        <label for="agreement1" class="form-check-label">I accept the terms and conditions *</label>
+                    </div>
+                    <div class="form-check">
+                        <input id="agreement2" type="checkbox" name="orderModel.AgreeToRefundPolicy" class="form-check-input" required>
+                        <label for="agreement2" class="form-check-label">I accept the refund policy *</label>
+                    </div>
+                </div>
+
+                <button class="btn btn-success w-100" type="submit">Submit Order</button>
             </form>
-        <div class="row">
-            <div class="col-md-12">
-                <p class="text-center">Other features in development and will be available soon.</p>
-            </div>
         </div>
+
+        <p class="text-center mt-3">Other features in development and will be available soon.</p>
     </div>
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const orderInput = document.getElementById("order");
+        const detailsInput = document.getElementById("details");
+        const submitButton = document.getElementById("submit");
+        const errorMessage = document.getElementById("error");
+      
+        submitButton.addEventListener("click", (e) => {
+          e.preventDefault();
+      
+          // Получение данных из полей
+          const orderText = orderInput.value.trim();
+          const detailsText = detailsInput.value.trim();
+      
+          // Проверка ограничений
+          if (orderText.length > 300) {
+            errorMessage.textContent = "Поле заказа не должно превышать 300 символов.";
+            return;
+          }
+          if (detailsText.length > 100) {
+            errorMessage.textContent = "Поле деталей не должно превышать 100 символов.";
+            return;
+          }
+          if (orderText.includes("DROP DATABASE") || detailsText.includes("DROP DATABASE")) {
+            errorMessage.textContent = "Нельзя вводить запрещенные команды.";
+            return;
+          }
+      
+          // Если всё корректно, выводим сообщение об успешной отправке
+          errorMessage.textContent = "";
+          alert("Заказ успешно отправлен!");
+        });
+      });
+      
+</script>
+<style>
+    /* Установка фона сайта и цвета текста */
+    body {
+        background-color: #ffffff; /* Белый фон */
+        color: #000000; /* Чёрный текст */
+    }
+
+    form {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    :root {
+        --primary-color: #1b6ec2;
+        --primary-hover-color: #145a99;
+        --primary-border-color: #1861ac;
+        --secondary-color: #258cfb;
+        --error-color: #e50000;
+        --success-color: #26b050;
+    }
+
+    a, .btn-link {
+        color: var(--primary-color);
+        text-decoration: none;
+    }
+
+    a:hover, .btn-link:hover {
+        color: var(--primary-hover-color);
+        text-decoration: underline;
+    }
+
+    .btn-primary {
+        color: #fff;
+        background-color: var(--primary-color);
+        border-color: var(--primary-border-color);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-hover-color);
+        border-color: var(--primary-hover-color);
+    }
+
+    .app-container {
+        margin-top: 2rem;
+        padding: 2rem;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+</style>
 </html>

@@ -5,12 +5,12 @@
 
     //$password = md5($password."qweqweqwe123");
 
-    if ($login === 'admin' && $password === '1234') {
+    if ($login === 'login' && $password === 'pass') {
         setcookie('user', $login, time() + 3600, "/"); // Устанавливаем cookie на час
-        header('Location: MainSite.php'); // Перенаправление на MainSite.html
+        header('Location: MainSite.php'); // Перенаправление на MainSite.php
         exit(); // Завершаем выполнение скрипта
     } else {
-        echo "Invalid login or password";
+        echo "Invalid login or password<br>";
     }
 
     $mysql = new mysqli('localhost', 'root', '', 'balti24db');
@@ -20,7 +20,7 @@
     $user = $result->fetch_assoc();
 
     if($user === null){
-        echo "User not found";
+        echo " User not found";
         exit();
     }
 

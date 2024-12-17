@@ -6,3 +6,6 @@ form {
     border-radius: 5px;
     background-color: #f9f9f9;
 }
+.is-invalid {
+    border-color: red;
+}

@@ -1,11 +1,150 @@
-form {
-    width: 500px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+/* Общие стили для всей страницы */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f9f6f4; /* Цвет фона страницы из логотипа */
 }
-.is-invalid {
-    border-color: red;
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Стили для шапки */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #a0341c; /* Красно-коричневый цвет из логотипа */
+    color: #fff;
+    padding: 15px 20px;
+}
+
+.header .logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 15px;
+}
+
+.nav ul li {
+    display: inline;
+}
+
+.nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.nav ul li a:hover {
+    background-color: #5a8a8a; /* Голубоватый цвет при наведении */
+}
+
+/* Стили для кнопок */
+.auth-buttons .btn {
+    background-color: #a0341c; /* Красно-коричневый цвет из логотипа */
+    color: #fff; /* Белый текст */
+    border: none; /* Убираем обводку */
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px; /* Закругленные края */
+    text-decoration: none; /* Убираем подчеркивание */
+    transition: background-color 0.3s ease; /* Плавный переход */
+}
+
+.auth-buttons .btn:hover {
+    background-color: #5a8a8a; /* Голубоватый цвет при наведении */
+}
+
+/* Стили для формы */
+.form-container {
+    display: flex;
+    justify-content: center; /* Центрирование форм по горизонтали */
+    align-items: flex-start; /* Выравнивание форм по верхнему краю */
+    gap: 40px; /* Расстояние между колонками */
+    margin-top: 50px; /* Отступ сверху */
+}
+
+form {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #a0341c; /* Красно-коричневая обводка */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Лёгкая тень */
+    width: 100%;
+    max-width: 400px; /* Ограничение ширины формы */
+}
+
+form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+form input:focus {
+    border-color: #5a8a8a; /* Голубоватый цвет при фокусе */
+    outline: none;
+    box-shadow: 0 0 5px rgba(90, 138, 138, 0.5); /* Голубоватая тень */
+}
+
+form button {
+    background-color: #a0341c;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%; /* Кнопка на всю ширину формы */
+}
+
+form button:hover {
+    background-color: #5a8a8a; /* Голубоватый цвет при наведении */
+}
+
+form button:active {
+    transform: scale(0.98); /* Лёгкое уменьшение размера при нажатии */
+}
+
+/* Стили для текста */
+h1 {
+    color: #a0341c;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 32px;
+    color: #a0341c; /* Заголовок в красно-коричневом цвете */
+}
+
+/* Стили для футера */
+.footer {
+    margin-top: 50px;
+    background: #a0341c; /* Фон подвала из логотипа */
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
 }

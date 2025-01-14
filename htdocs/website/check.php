@@ -15,8 +15,6 @@
     }
 
     setcookie('user', $login, time() + 3600, "/"); // Устанавливаем cookie на час
-   /* header('Location: MainSite.php'); // Перенаправление на MainSite.html
-    exit(); */
 
     //$password = md5($password."qweqweqwe123");"INSERT INTO `users` (`login`,`name`,`pass`) VALUES('$login', '$name', '$password')
 

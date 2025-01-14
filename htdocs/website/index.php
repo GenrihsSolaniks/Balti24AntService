@@ -13,10 +13,23 @@ if (isset($_COOKIE['user'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration form</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<header class="header">
+        <div class="container">
+            <div class="logo">Balti24</div>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="about.html">О нас</a></li>
+                    <li><a href="MainSite.php">Заполнить форму заказа</a></li>
+                    <li><a href="contact.html">Контакты</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
     <div class="container mt-4">
         <div class="row">
             <div class="col">
@@ -38,5 +51,10 @@ if (isset($_COOKIE['user'])) {
             </div>
         </div>
     </div>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Balti24. Все права защищены.</p>
+        </div>
+    </footer>
 </body>
 </html>

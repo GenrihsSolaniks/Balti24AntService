@@ -120,3 +120,11 @@ body {
     text-align: center;
     padding: 20px 0;
 }
+
+form button:hover {
+    background-color: #5a8a8a; /* Голубоватый цвет при наведении */
+}
+
+form button:active {
+    transform: scale(0.98); /* Лёгкое уменьшение размера при нажатии */
+}

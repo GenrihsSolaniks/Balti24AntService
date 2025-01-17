@@ -34,7 +34,7 @@ if (isset($_COOKIE['user'])) {
         <div class="row">
             <div class="col">
                 <h1>Registration form</h1>
-                <form action="check.php" method="post">
+                <form action="check_conf.php" method="post">
                     <input type="text" class="form-control" name="login" id="login" placeholder="Enter your login" required><br>
                     <input type="text" class="form-control" name="name" id="name" placeholder="Enter your name" required><br>
                     <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required><br>
@@ -43,7 +43,7 @@ if (isset($_COOKIE['user'])) {
             </div>
             <div class="col">
                 <h1>Authorization</h1>
-                <form action="auth.php" method="post">
+                <form action="auth_conf.php" method="post">
                     <input type="text" class="form-control" name="login" id="login" placeholder="Enter your login" required><br>
                     <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required><br>
                     <button class="btn btn-success" type="submit">Log in</button>

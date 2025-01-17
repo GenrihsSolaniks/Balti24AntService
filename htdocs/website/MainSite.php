@@ -30,10 +30,10 @@ if (!isset($_COOKIE['user'])) {
     </header>
     <div class="container mt-4">
         <h1 class="text-center">Welcome, <?=htmlspecialchars($_COOKIE['user'])?>!</h1>
-        <p class="text-center"><a href="exit.php" class="btn btn-link">Log out</a></p>
+        <p class="text-center"><a href="exit_conf.php" class="btn btn-link">Log out</a></p>
 
         <div class="app-container">
-            <form action="order.php" method="post">
+            <form action="order_conf.php" method="post">
                 <div class="form-group mb-3">
                     <label for="serviceArea">Select Service Area *</label>
                     <select id="serviceArea" name="ServiceArea" class="form-control" required>
@@ -103,94 +103,4 @@ if (!isset($_COOKIE['user'])) {
         </div>
     </footer>
 </body>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const orderInput = document.getElementById("order");
-        const detailsInput = document.getElementById("details");
-        const submitButton = document.getElementById("submit");
-        const errorMessage = document.getElementById("error");
-      
-        submitButton.addEventListener("click", (e) => {
-          e.preventDefault();
-      
-          // Получение данных из полей
-          const orderText = orderInput.value.trim();
-          const detailsText = detailsInput.value.trim();
-      
-          // Проверка ограничений
-          if (orderText.length > 300) {
-            errorMessage.textContent = "Поле заказа не должно превышать 300 символов.";
-            return;
-          }
-          if (detailsText.length > 100) {
-            errorMessage.textContent = "Поле деталей не должно превышать 100 символов.";
-            return;
-          }
-          if (orderText.includes("DROP DATABASE") || detailsText.includes("DROP DATABASE")) {
-            errorMessage.textContent = "Нельзя вводить запрещенные команды.";
-            return;
-          }
-      
-          // Если всё корректно, выводим сообщение об успешной отправке
-          errorMessage.textContent = "";
-          alert("Заказ успешно отправлен!");
-        });
-      });
-      
-</script>
-<style>
-    /* Установка фона сайта и цвета текста */
-    body {
-        background-color: #ffffff; /* Белый фон */
-        color: #000000; /* Чёрный текст */
-    }
-
-    form {
-        width: 100%;
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-    }
-
-    :root {
-        --primary-color: #1b6ec2;
-        --primary-hover-color: #145a99;
-        --primary-border-color: #1861ac;
-        --secondary-color: #258cfb;
-        --error-color: #e50000;
-        --success-color: #26b050;
-    }
-
-    a, .btn-link {
-        color: var(--primary-color);
-        text-decoration: none;
-    }
-
-    a:hover, .btn-link:hover {
-        color: var(--primary-hover-color);
-        text-decoration: underline;
-    }
-
-    .btn-primary {
-        color: #fff;
-        background-color: var(--primary-color);
-        border-color: var(--primary-border-color);
-    }
-
-    .btn-primary:hover {
-        background-color: var(--primary-hover-color);
-        border-color: var(--primary-hover-color);
-    }
-
-    .app-container {
-        margin-top: 2rem;
-        padding: 2rem;
-        background-color: #f8f9fa;
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-</style>
 </html>

@@ -2,7 +2,7 @@
 if (isset($_COOKIE['user'])) {
     // Если пользователь авторизован, покажем ему выбор
     echo "<p>Hello, " . htmlspecialchars($_COOKIE['user']) . "!</p>";
-    echo "<p>You are already logged in. Go to <a href='MainSite.php'>Main Site</a> or <a href='exit.php'>Log out</a>.</p>";
+    echo "<p>You are already logged in. Go to <a href='MainSite.php'>Main Site</a> or <a href='exit_conf.php'>Log out</a>.</p>";
     exit();
 }
 ?>
@@ -21,7 +21,7 @@ if (isset($_COOKIE['user'])) {
         <div class="row">
             <div class="col">
                 <h1>Authorization</h1>
-                <form action="auth.php" method="post">
+                <form action="auth_conf.php" method="post">
                     <input type="text" class="form-control" name="login" id="login" placeholder="Enter your login" required><br>
                     <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required><br>
                     <button class="btn btn-success" type="submit">Log in</button>

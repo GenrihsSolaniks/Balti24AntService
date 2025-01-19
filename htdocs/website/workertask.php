@@ -1,36 +1,17 @@
 <?php
-if (!isset($_COOKIE['user'])) {
-    header('Location: adminauth.html');
-    exit();
-}
-
 $mysql = new mysqli('localhost', 'root', '', 'balti24db');
 if ($mysql->connect_error) {
     die("Ошибка подключения: " . $mysql->connect_error);
 }
 
-$query = "SELECT * FROM tasks";
+$query = "SELECT * FROM tasks WHERE status = 1"; // Только опубликованные заказы
 $result = $mysql->query($query);
 
 echo "<table>";
 echo "<tr><th>ID</th><th>User ID</th><th>Area</th><th>Address</th><th>City</th><th>Country</th><th>Date</th><th>Task</th><th>Additional</th><th>Action</th></tr>";
 
 while ($row = $result->fetch_assoc()) {
-    $statusClass = "";
-    $buttonText = "Опубликовать заказ";
-    $buttonAction = "publishOrder";
-
-    if ($row['status'] == 1) {
-        $statusClass = "highlight-yellow";
-        $buttonText = "Ожидание подтверждения";
-        $buttonAction = "";
-    } elseif ($row['status'] == 2) {
-        $statusClass = "highlight-green";
-        $buttonText = "Принят";
-        $buttonAction = "";
-    }
-
-    echo "<tr class='$statusClass'>";
+    echo "<tr>";
     echo "<td>{$row['id']}</td>";
     echo "<td>{$row['user_id']}</td>";
     echo "<td>{$row['area']}</td>";
@@ -40,31 +21,27 @@ while ($row = $result->fetch_assoc()) {
     echo "<td>{$row['date']}</td>";
     echo "<td>{$row['task']}</td>";
     echo "<td>{$row['additional']}</td>";
-    echo "<td>";
-    if ($buttonAction) {
-        echo "<button onclick=\"updateOrderStatus({$row['id']}, '$buttonAction')\">$buttonText</button>";
-    }
-    echo "</td>";
+    echo "<td><button onclick=\"acceptOrder({$row['id']})\">Принять заказ</button></td>";
     echo "</tr>";
 }
 echo "</table>";
 
-
-
 $mysql->close();
 ?>
+
+
 <script>
-function updateOrderStatus(orderId, action) {
+function acceptOrder(orderId) {
     fetch('update_order_status.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: orderId, action: action })
+        body: JSON.stringify({ id: orderId, action: 'acceptOrder' })
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Статус обновлён успешно!');
-            location.reload(); // Обновление страницы
+            alert('Заказ успешно принят!');
+            location.reload(); // Обновляем страницу
         } else {
             alert('Ошибка: ' + data.message);
         }

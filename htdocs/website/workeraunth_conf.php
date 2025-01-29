@@ -30,20 +30,20 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 // Получаем данные пользователя
-$user = $result->fetch_assoc();
+$worker = $result->fetch_assoc();
 
-if ($user === null) {
+if ($worker === null) {
     echo "Invalid login or password";
     $stmt->close();
     $mysql->close();
     exit();
 }
 
-// Сохраняем user_id в сессию
-$_SESSION['worker_id'] = $user['id'];
+// Сохраняем worker_id в сессию
+$_SESSION['worker_id'] = $worker['id'];
 
 // Устанавливаем cookie с именем пользователя
-setcookie('user', $user['name'], time() + 3600, "/");
+setcookie('worker_id', $worker['id'], time() + 3600, "/");
 
 // Закрываем соединение с базой
 $stmt->close();

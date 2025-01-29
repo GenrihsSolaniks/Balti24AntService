@@ -1,5 +1,5 @@
 <?php
-if (!isset($_COOKIE['user'])) {
+if (!isset($_COOKIE['admin_id'])) {
     header('Location: adminauth.html'); // Перенаправление на adminauth.html
     exit();
 }
@@ -40,6 +40,7 @@ if (!isset($_COOKIE['user'])) {
                     <li><a href="admintask.php">Таблица заказов</a></li>
                     <li><a href="adminuser.php">Таблица пользователей</a></li>
                     <li><a href="adminworker.php">Таблица работников</a></li>
+                    <li><a href="admincomplete.php">Выполненые заказы</a></li>
                 </ul>
             </nav>
             <p class="text-center"><a href="exit_admin_conf.php" class="btn btn-link">Log out</a></p>

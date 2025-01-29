@@ -30,27 +30,14 @@ if (isset($_COOKIE['user'])) {
         </div>
     </header>
 <body>
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col">
-                <h1>Registration form</h1>
-                <form action="check_conf.php" method="post">
-                    <input type="text" class="form-control" name="login" id="login" placeholder="Enter your login" required><br>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="Enter your name" required><br>
-                    <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required><br>
-                    <button class="btn btn-success" type="submit">Sign up</button>
-                </form>
-            </div>
-            <div class="col">
-                <h1>Authorization</h1>
-                <form action="auth_conf.php" method="post">
-                    <input type="text" class="form-control" name="login" id="login" placeholder="Enter your login" required><br>
-                    <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required><br>
-                    <button class="btn btn-success" type="submit">Log in</button>
-                </form>
-            </div>
+    <h1>Choose your type</h1>
+    <div class="container">
+            <nav class="nav">
+                <ul>
+                    <li><a href="compregister.html">Company</a><a href="indregister.html">Individual</a></li>
+                </ul>
+            </nav>
         </div>
-    </div>
     <footer class="footer">
         <div class="container">
             <p>&copy; 2025 Balti24. Все права защищены.</p>

@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Функция загрузки задач для работника
 function loadTasks() {
-    fetch('workertask_conf.php')
+    fetch('workercomp_conf.php')
         .then(response => response.text())
         .then(data => {
             let container = document.getElementById('tasks-container');
@@ -71,24 +71,23 @@ function acceptOrder(orderId) {
 }
 
 // Функция завершения заказа
-function acceptOrder(orderId) {
+function completeOrder(orderId) {
     fetch('update_order_status_conf.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: orderId, action: 'completeOrder' }) // Меняем статус на выполнено
+        body: JSON.stringify({ id: orderId, action: 'completeOrder' })
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Заказ выполнен!');
-            location.reload(); // Перезагрузка страницы
+            alert('Заказ завершён!');
+            loadTasks(); // Перезагрузка списка задач
         } else {
             alert('Ошибка: ' + data.message);
         }
     })
-    .catch(error => console.error('Ошибка:', error));
+    .catch(error => console.error('Ошибка при завершении заказа:', error));
 }
-
 
 // Обновление данных каждые 5 секунд
 setInterval(loadTasks, 5000);

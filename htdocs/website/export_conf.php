@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 }
 
 // Запрос к таблице
-$table = "admins"; // Укажите имя вашей таблицы
+$table = "completetask"; // Укажите имя вашей таблицы
 $query = "SELECT * FROM $table";
 $result = $conn->query($query);
 

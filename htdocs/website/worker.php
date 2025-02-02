@@ -36,6 +36,25 @@ document.addEventListener("DOMContentLoaded", function () {
     loadTasks();
 });
 
+function updateOrderStatus(orderId, nextStatus) {
+    fetch('update_order_status_conf.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: orderId, action: nextStatus })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Статус заказа обновлён!');
+            loadTasks();  // Обновляем список задач
+        } else {
+            alert('Ошибка: ' + data.message);
+        }
+    })
+    .catch(error => console.error('Ошибка:', error));
+}
+
+
 // Функция загрузки задач для работника
 function loadTasks() {
     fetch('workertask_conf.php')

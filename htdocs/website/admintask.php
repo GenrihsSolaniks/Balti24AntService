@@ -33,26 +33,39 @@ if (!isset($_COOKIE['admin_id'])) {
 <div id="data-container">
     <!-- Таблица будет загружаться сюда -->
 </div>
-<button onclick="window.location.href='export_conf.php'">Скачать таблицу</button>
 
 <script>
-    function updateOrderStatus(orderId, action) {
-        fetch('update_order_status_conf.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: orderId, action: action })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Статус обновлён успешно!');
-                location.reload(); // Обновляем страницу
-            } else {
-                alert('Ошибка: ' + data.message);
-            }
-        })
-        .catch(error => console.error('Ошибка:', error));
-    }
+    function checkPendingOrders() {
+    fetch('check_pending_orders_conf.php')
+    .then(response => response.json())
+    .then(data => {
+        if (data.alert) {
+            alert('Внимание! Заказ не принят более 30 минут.');
+            loadTasks(); // Обновляем таблицу
+        }
+    });
+}
+
+// Проверка каждые 5 минут
+setInterval(checkPendingOrders, 300000);
+
+    function updateOrderStatus(orderId, newStatus) {
+    fetch('update_order_status_conf.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: orderId, status: newStatus })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Статус обновлён успешно!');
+            loadTasks(); // Обновляем таблицу
+        } else {
+            alert('Ошибка: ' + data.message);
+        }
+    })
+    .catch(error => console.error('Ошибка:', error));
+}
     function loadData() {
     // Сохраняем текущие выбранные worker_id перед обновлением
     let selectedWorkers = {};

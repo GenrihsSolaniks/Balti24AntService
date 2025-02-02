@@ -12,7 +12,7 @@ $data = json_decode(file_get_contents('php://input'), true);
 $orderId = $data['id'] ?? null;
 $action = $data['action'] ?? null;
 
-if (!$orderId || !$action) {
+if (!$orderId || !is_numeric($action)) {
     echo json_encode(['success' => false, 'message' => 'Неверные данные']);
     exit();
 }
@@ -30,38 +30,33 @@ if (!$order) {
     exit();
 }
 
-// Если действие "acceptOrder", обновляем статус
-if ($action === 'acceptOrder') {
-    $updateQuery = "UPDATE tasks SET status = 2 WHERE id = ?";
-    $stmt = $mysql->prepare($updateQuery);
-    $stmt->bind_param("i", $orderId);
-    if ($stmt->execute()) {
-        echo json_encode(['success' => true]);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Ошибка обновления']);
-    }
-}
+// Обновляем статус заказа
+$updateQuery = "UPDATE tasks SET status = ? WHERE id = ?";
+$stmt = $mysql->prepare($updateQuery);
+$stmt->bind_param("ii", $action, $orderId);
 
-// Если заказ выполнен, переносим его в completetask
-if ($action === 'completeOrder') {
-    // Переносим данные в таблицу completetask
-    $insertQuery = "INSERT INTO completetask (id, user_id, area, address, city, country, date, task, additional, worker_id, status) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 2)";
-    $stmt = $mysql->prepare($insertQuery);
-    $stmt->bind_param("iisssssssi", $order['id'], $order['user_id'], $order['area'], $order['address'], 
-                                      $order['city'], $order['country'], $order['date'], $order['task'], 
-                                      $order['additional'], $order['worker_id']);
-    if ($stmt->execute()) {
-        // Удаляем из tasks
-        $deleteQuery = "DELETE FROM tasks WHERE id = ?";
-        $stmt = $mysql->prepare($deleteQuery);
-        $stmt->bind_param("i", $orderId);
-        $stmt->execute();
+if ($stmt->execute()) {
+    // Если статус равен 7 (заказ завершён), переносим его в таблицу выполненных заказов
+    if ($action == 7) {
+        $insertQuery = "INSERT INTO completetask (id, user_id, area, address, city, country, date, task, additional, worker_id, status) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $mysql->prepare($insertQuery);
+        $stmt->bind_param("iisssssssis", $order['id'], $order['user_id'], $order['area'], $order['address'], 
+                                           $order['city'], $order['country'], $order['date'], $order['task'], 
+                                           $order['additional'], $order['worker_id'], $action);
 
-        echo json_encode(['success' => true]);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Ошибка переноса заказа']);
+        if ($stmt->execute()) {
+            // Удаляем заказ из текущей таблицы
+            $deleteQuery = "DELETE FROM tasks WHERE id = ?";
+            $stmt = $mysql->prepare($deleteQuery);
+            $stmt->bind_param("i", $orderId);
+            $stmt->execute();
+        }
     }
+
+    echo json_encode(['success' => true]);
+} else {
+    echo json_encode(['success' => false, 'message' => 'Ошибка обновления статуса']);
 }
 
 $mysql->close();

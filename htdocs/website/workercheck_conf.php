@@ -6,6 +6,7 @@ $login = filter_var(trim($_POST['login']), FILTER_SANITIZE_SPECIAL_CHARS);
 $name = filter_var(trim($_POST['name']), FILTER_SANITIZE_SPECIAL_CHARS);
 $surname = filter_var(trim($_POST['surname']), FILTER_SANITIZE_SPECIAL_CHARS);
 $number = filter_var(trim($_POST['number']), FILTER_SANITIZE_SPECIAL_CHARS);
+$type = filter_var(trim($_POST['type']), FILTER_SANITIZE_SPECIAL_CHARS);
 $password = filter_var(trim($_POST['password']), FILTER_SANITIZE_SPECIAL_CHARS);
 $checkword = filter_var(trim($_POST['checkword']), FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -50,8 +51,8 @@ if ($result->num_rows > 0) {
 }
 
 // Подготовленный запрос для вставки нового пользователя
-$stmt = $mysql->prepare("INSERT INTO `workers` (`login`, `name`, `surname`, `number`, `password`) VALUES (?, ?, ?, ?, ?)");
-$stmt->bind_param("sssss", $login, $name, $surname, $number, $password);
+$stmt = $mysql->prepare("INSERT INTO `workers` (`login`, `name`, `surname`, `number`, `type`, `password`) VALUES (?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("ssssss", $login, $name, $surname, $number, $type, $password);
 
 // Выполняем запрос
 if (!$stmt->execute()) {

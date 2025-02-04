@@ -8,7 +8,7 @@ $query = "SELECT * FROM tasks";
 $result = $mysql->query($query);
 
 echo "<table>";
-echo "<tr><th>ID</th><th>User ID</th><th>Area</th><th>Address</th><th>City</th><th>Country</th><th>Date</th><th>Task</th><th>Additional</th><th>Worker</th><th>Status</th><th>Action</th></tr>";
+echo "<tr><th>ID</th><th>User ID</th><th>Area</th><th>Phone</th><th>Address</th><th>City</th><th>Country</th><th>Date</th><th>Task</th><th>Additional</th><th>Worker</th><th>Status</th><th>Action</th></tr>";
 
 // Определяем цвета для каждого статуса
 $statusColors = [
@@ -44,6 +44,9 @@ while ($row = $result->fetch_assoc()) {
     echo "<td>{$row['id']}</td>";
     echo "<td>{$row['user_id']}</td>";
     echo "<td>{$row['area']}</td>";
+
+    echo "<td><a href='https://wa.me/{$row['phone']}' target='_blank'>{$row['phone']}</a></td>";
+
     echo "<td>{$row['address']}</td>";
     echo "<td>{$row['city']}</td>";
     echo "<td>{$row['country']}</td>";

@@ -44,9 +44,14 @@ if (!isset($_COOKIE['user'])) {
                 </div>
 
                 <div class="form-group mb-3">
+                    <input type="text" class="form-control" name="phone" id="phone" placeholder="Enter your phone nr." required>
+                </div>
+
+                <div class="form-group mb-3">
                     <input type="text" class="form-control" name="address" id="address" placeholder="Enter your address" required>
                 </div>
 
+                
                 <div class="form-group mb-3">
                     <input type="text" class="form-control" name="city" id="city" placeholder="Enter your city" required>
                 </div>

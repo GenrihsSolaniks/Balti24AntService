@@ -108,6 +108,24 @@ function acceptOrder(orderId) {
     .catch(error => console.error('Ошибка:', error));
 }
 
+function togglePauseStatus(orderId) {
+    fetch('toggle_pause_status.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: orderId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Статус паузы обновлен!');
+            location.reload();  // Перезагрузка страницы для обновления статуса
+        } else {
+            alert('Ошибка: ' + data.message);
+        }
+    })
+    .catch(error => console.error('Ошибка:', error));
+}
+
 
 // Обновление данных каждые 5 секунд
 setInterval(loadTasks, 5000);

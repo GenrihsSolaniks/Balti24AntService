@@ -30,6 +30,22 @@ if (!$order) {
     exit();
 }
 
+if ($action === 'togglePause') {
+    if ($row['pause_status'] == 0) {
+        // Ставим на паузу и добавляем запись в историю
+        $mysql->query("UPDATE tasks SET pause_status = 1 WHERE id = $orderId");
+        $mysql->query("INSERT INTO pause_history (task_id, pause_time) VALUES ($orderId, NOW())");
+    } else {
+        // Снимаем с паузы и обновляем запись с временем возобновления
+        $mysql->query("UPDATE tasks SET pause_status = 0 WHERE id = $orderId");
+        $mysql->query("UPDATE pause_history SET resume_time = NOW() WHERE task_id = $orderId AND resume_time IS NULL");
+    }
+
+    echo json_encode(['success' => true]);
+    exit();
+}
+
+
 // Обновляем статус заказа
 $updateQuery = "UPDATE tasks SET status = ? WHERE id = ?";
 $stmt = $mysql->prepare($updateQuery);

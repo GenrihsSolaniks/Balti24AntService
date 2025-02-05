@@ -8,7 +8,7 @@ $query = "SELECT * FROM tasks";
 $result = $mysql->query($query);
 
 echo "<table>";
-echo "<tr><th>ID</th><th>User ID</th><th>Area</th><th>Phone</th><th>Address</th><th>City</th><th>Country</th><th>Date</th><th>Task</th><th>Additional</th><th>Worker</th><th>Status</th><th>Action</th></tr>";
+echo "<tr><th>ID</th><th>User ID</th><th>Area</th><th>Phone</th><th>Address</th><th>City</th><th>Country</th><th>Date</th><th>Task</th><th>Additional</th><th>Worker</th><th>Status</th><th>Pause History</th><th>Action</th></tr>";
 
 // Определяем цвета для каждого статуса
 $statusColors = [
@@ -37,16 +37,33 @@ $statusText = [
 ];
 
 while ($row = $result->fetch_assoc()) {
-    // Устанавливаем цвет строки
     $rowStyle = $statusColors[$row['status']] ?? '';
+
+    // Если пауза включена, перекрашиваем строку в красный и добавляем текст
+    if ($row['pause_status'] == 1) {
+        $rowStyle = 'background: #ff4d4d;';
+        $pauseDisplay = 'На паузе';
+    } else {
+        $pauseDisplay = 'Активно';
+    }
+
+    $pauseHistoryQuery = $mysql->prepare("SELECT pause_time, resume_time FROM pause_history WHERE task_id = ?");
+    $pauseHistoryQuery->bind_param("i", $row['id']);
+    $pauseHistoryQuery->execute();
+    $pauseHistoryResult = $pauseHistoryQuery->get_result();
+
+    // Формируем строки для истории пауз
+    $pauseHistoryDisplay = '';
+    while ($historyRow = $pauseHistoryResult->fetch_assoc()) {
+        $resumeTime = $historyRow['resume_time'] ?? 'Текущая пауза';
+        $pauseHistoryDisplay .= "Пауза с {$historyRow['pause_time']} до {$resumeTime}<br>";
+    }
 
     echo "<tr style='{$rowStyle}'>";
     echo "<td>{$row['id']}</td>";
     echo "<td>{$row['user_id']}</td>";
     echo "<td>{$row['area']}</td>";
-
-    echo "<td><a href='https://wa.me/{$row['phone']}' target='_blank'>{$row['phone']}</a></td>";
-
+    echo "<td>{$row['phone']}</td>";
     echo "<td>{$row['address']}</td>";
     echo "<td>{$row['city']}</td>";
     echo "<td>{$row['country']}</td>";
@@ -54,7 +71,7 @@ while ($row = $result->fetch_assoc()) {
     echo "<td>{$row['task']}</td>";
     echo "<td>{$row['additional']}</td>";
 
-    // Вывод имени работника
+    // Имя работника
     if (!empty($row['worker_id'])) {
         $workerQuery = $mysql->prepare("SELECT name FROM workers WHERE id = ?");
         $workerQuery->bind_param("i", $row['worker_id']);
@@ -66,9 +83,13 @@ while ($row = $result->fetch_assoc()) {
         echo "<td>Не назначен</td>";
     }
 
-    // Вывод текстового статуса
+    // Статус и пауза
     $statusDisplay = $statusText[$row['status']] ?? 'Неизвестный статус';
     echo "<td>{$statusDisplay}</td>";
+    //echo "<td>{$statusDisplay} ({$pauseDisplay})</td>";
+
+    // Вывод истории пауз
+    echo "<td>{$pauseHistoryDisplay}</td>";
 
     // Условие для вывода кнопки назначения работника
     if (empty($row['worker_id'])) {

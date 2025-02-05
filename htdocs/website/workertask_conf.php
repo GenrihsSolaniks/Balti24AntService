@@ -38,8 +38,21 @@ while ($row = $result->fetch_assoc()) {
     echo "<td>{$row['task']}</td>";
     echo "<td>{$statusNames[$row['status']]}</td>";
 
-    // Если статус ещё не завершён, отображаем кнопку действия
-    if ($row['status'] < 7) {
+    // Обработка действий на статусе 4 (Приступил к работе)
+    if ($row['status'] == 4) {
+        if ($row['pause_status'] == 1) {
+            // Если пауза активна, показываем кнопку "Снять паузу"
+            echo "<td><button onclick=\"togglePauseStatus({$row['id']})\">Снять паузу</button></td>";
+        } else {
+            // Если пауза не активна, показываем две кнопки: "Поставить на паузу" и переход на следующий статус
+            $nextStatus = $row['status'] + 1;
+            echo "<td>
+                    <button onclick=\"togglePauseStatus({$row['id']})\">Поставить на паузу</button>
+                    <button onclick=\"updateOrderStatus({$row['id']}, {$nextStatus})\">{$statusNames[$nextStatus]}</button>
+                  </td>";
+        }
+    } elseif ($row['status'] < 7) {
+        // Если статус не завершён и не равен 4, отображаем кнопку следующего статуса
         $nextStatus = $row['status'] + 1;
         echo "<td><button onclick=\"updateOrderStatus({$row['id']}, {$nextStatus})\">{$statusNames[$nextStatus]}</button></td>";
     } else {
@@ -51,4 +64,5 @@ while ($row = $result->fetch_assoc()) {
 echo "</table>";
 
 $mysql->close();
+
 ?>

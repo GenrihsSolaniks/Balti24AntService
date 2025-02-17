@@ -21,6 +21,7 @@ if (!isset($_COOKIE['admin_id'])) {
         <nav class="nav">
             <ul>
                 <li><a href="admintask.php">Таблица заказов</a></li>
+                <li><a href="admincalendar.php">Календарь работников</a></li>
                 <li><a href="adminuser.php">Таблица пользователей</a></li>
                 <li><a href="adminworker.php">Таблица работников</a></li>
                 <li><a href="admincomplete.php">Выполненые заказы</a></li>

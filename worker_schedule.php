@@ -14,6 +14,7 @@ $worker_id = $_SESSION['worker_id']; // Берём ID работника из с
     <title>Моя занятость</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="stylesindex.css">
 </head>
 <body>
 <header class="header">
@@ -63,5 +64,11 @@ $worker_id = $_SESSION['worker_id']; // Берём ID работника из с
             });
         });
     </script>
+
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2025 Balti24. Все права защищены.</p>
+    </div>
+</footer>
 </body>
 </html>

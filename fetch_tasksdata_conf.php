@@ -63,7 +63,7 @@ while ($row = $result->fetch_assoc()) {
     echo "<td>{$row['id']}</td>";
     echo "<td>{$row['user_id']}</td>";
     echo "<td>{$row['area']}</td>";
-    echo "<td>{$row['phone']}</td>";
+    echo "<td><a href='https://wa.me/{$row['phone']}' target='_blank'>{$row['phone']}</a></td>";
     echo "<td>{$row['address']}</td>";
     echo "<td>{$row['city']}</td>";
     echo "<td>{$row['country']}</td>";

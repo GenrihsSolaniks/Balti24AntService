@@ -44,6 +44,7 @@ if (!isset($_COOKIE['user'])) {
                 </div>
 
                 <div class="form-group mb-3">
+                    <p>Телефон в формате: +371 12345678</p>
                     <input type="text" class="form-control" name="phone" id="phone" placeholder="Enter your phone nr." required>
                 </div>
 
@@ -68,6 +69,7 @@ if (!isset($_COOKIE['user'])) {
                 <div class="form-group mb-3">
                     <label for="date">Select an Available Date *</label>
                     <input id="date" type="date" name="date" class="form-control" required>
+                    <p id="date-warning" style="color: red; display: none;">Этот день уже занят! Выберите другой.</p>
                 </div>
 
                 <div class="form-group mb-3">
@@ -107,5 +109,43 @@ if (!isset($_COOKIE['user'])) {
             <p>&copy; 2025 Balti24. Все права защищены.</p>
         </div>
     </footer>
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    let dateInput = document.getElementById("date");
+    let serviceAreaInput = document.getElementById("serviceArea");
+    let dateWarning = document.getElementById("date-warning");
+
+    // ✅ Устанавливаем минимальную дату (нельзя выбрать прошедшие дни)
+    let today = new Date().toISOString().split("T")[0];
+    dateInput.setAttribute("min", today);
+
+    // Загружаем занятые даты
+    fetch("get_busy_dates.php")
+        .then(response => response.json())
+        .then(busyDates => {
+            dateInput.addEventListener("input", function () {
+                let selectedDate = this.value;
+                let selectedService = serviceAreaInput.value; // Получаем тип работы
+                
+                // Если сервис не выбран - запрещаем выбор даты
+                if (!selectedService) {
+                    alert("Сначала выберите сферу работы!");
+                    this.value = "";
+                    return;
+                }
+
+                // Проверяем, занята ли дата для выбранного типа работы
+                if (busyDates[selectedDate] && busyDates[selectedDate].includes(selectedService)) {
+                    dateWarning.style.display = "block"; // Показываем предупреждение
+                    this.value = ""; // Очищаем поле
+                } else {
+                    dateWarning.style.display = "none"; // Скрываем предупреждение
+                }
+            });
+        })
+        .catch(error => console.error("Ошибка загрузки занятых дат:", error));
+});
+</script>
+
 </body>
 </html>

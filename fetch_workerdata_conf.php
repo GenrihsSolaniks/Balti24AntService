@@ -14,17 +14,16 @@ $result = $mysql->query($query);
 // Проверяем, есть ли данные в таблице
 if ($result->num_rows > 0) {
     echo "<table>";
-    echo "<tr><th>ID</th><th>Login</th><th>Name</th><th>Surname</th><th>PhoneNumber</th><th>Password</th></tr>";
+    echo "<tr><th>ID</th><th>Name</th><th>Surname</th><th>Type</th><th>PhoneNumber</th></tr>";
 
     // Вывод данных построчно
     while ($row = $result->fetch_assoc()) {
         echo "<tr>";
         echo "<td>" . $row['id'] . "</td>";
-        echo "<td>" . $row['login'] . "</td>";
         echo "<td>" . $row['name'] . "</td>";
         echo "<td>" . $row['surname'] . "</td>";
+        echo "<td>" . $row['type'] . "</td>";
         echo "<td>" . $row['number'] . "</td>";
-        echo "<td>" . $row['password'] . "</td>";
         echo "</tr>";
     }
 

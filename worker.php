@@ -4,7 +4,7 @@ if (!isset($_COOKIE['worker_id']) || empty($_COOKIE['worker_id'])) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,12 +21,13 @@ if (!isset($_COOKIE['worker_id']) || empty($_COOKIE['worker_id'])) {
             <ul>
                 <li><a href="worker.php">Таблица заказов</a></li>
                 <li><a href="worker_schedule.php">Моя занятость</a></li>
-                <li><a href="workercomplete.php">Выполненые заказы</a></li>
+                <li><a href="workercomplete.php">Выполненные заказы</a></li>
             </ul>
         </nav>
         <p class="text-center"><a href="exit_worker_conf.php" class="btn btn-link">Log out</a></p>
     </div>
 </header>
+
 <h1 style="text-align:center;">Real-Time MySQL Data</h1>
 <div id="tasks-container" style="text-align: center;">
     <!-- Здесь появятся задачи -->
@@ -37,16 +38,16 @@ document.addEventListener("DOMContentLoaded", function () {
     loadTasks();
 });
 
-function updateOrderStatus(orderId, nextStatus) {
+// Универсальная функция обновления статуса заказа
+function updateOrderStatus(orderId, action) {
     fetch('update_order_status_conf.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: orderId, action: nextStatus })
+        body: JSON.stringify({ id: orderId, action: action })
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Статус заказа обновлён!');
             loadTasks();  // Обновляем список задач
         } else {
             alert('Ошибка: ' + data.message);
@@ -54,7 +55,6 @@ function updateOrderStatus(orderId, nextStatus) {
     })
     .catch(error => console.error('Ошибка:', error));
 }
-
 
 // Функция загрузки задач для работника
 function loadTasks() {
@@ -73,71 +73,45 @@ function loadTasks() {
 
 // Функция принятия заказа
 function acceptOrder(orderId) {
-    fetch('update_order_status_conf.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: orderId, action: 'acceptOrder' })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Заказ принят!');
-            loadTasks(); // Перезагрузка списка задач
-        } else {
-            alert('Ошибка: ' + data.message);
-        }
-    })
-    .catch(error => console.error('Ошибка при принятии заказа:', error));
+    updateOrderStatus(orderId, 'acceptOrder');
 }
 
 // Функция завершения заказа
-function acceptOrder(orderId) {
+function completeOrder(orderId) {
+    updateOrderStatus(orderId, 'completeOrder');
+}
+
+// Функция переключения паузы
+function togglePauseStatus(orderId) {
+    console.log("Отправка запроса togglePause для заказа ID:", orderId);
+
     fetch('update_order_status_conf.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: orderId, action: 'completeOrder' }) // Меняем статус на выполнено
+        body: JSON.stringify({ id: orderId, action: 'togglePause' })
     })
     .then(response => response.json())
     .then(data => {
+        console.log("Ответ от сервера:", data);
         if (data.success) {
-            alert('Заказ выполнен!');
-            location.reload(); // Перезагрузка страницы
+            location.reload();
         } else {
-            alert('Ошибка: ' + data.message);
+            alert("Ошибка от сервера: " + data.message);
         }
     })
-    .catch(error => console.error('Ошибка:', error));
+    .catch(error => console.error("Ошибка запроса:", error));
 }
-
-function togglePauseStatus(orderId) {
-    fetch('toggle_pause_status.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: orderId })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Статус паузы обновлен!');
-            location.reload();  // Перезагрузка страницы для обновления статуса
-        } else {
-            alert('Ошибка: ' + data.message);
-        }
-    })
-    .catch(error => console.error('Ошибка:', error));
-}
-
 
 // Обновление данных каждые 5 секунд
 setInterval(loadTasks, 5000);
 </script>
+
 <footer class="footer">
     <div class="container">
         <p>&copy; 2025 Balti24. Все права защищены.</p>
     </div>
 </footer>
-</body>
-</html>
+
 <style>
 table {
     width: 80%;
@@ -175,3 +149,6 @@ table tr:hover {
     background-color: lightgreen !important;
 }
 </style>
+
+</body>
+</html>

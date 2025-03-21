@@ -4,7 +4,7 @@ header('Content-Type: application/json');
 // Подключение к базе данных
 $mysql = new mysqli('localhost', 'root', '', 'balti24db');
 if ($mysql->connect_error) {
-    echo json_encode(['success' => false, 'message' => 'Ошибка подключения к базе данных']);
+    echo json_encode(['success' => false, 'message' => 'Database connection error']);
     exit();
 }
 
@@ -14,7 +14,7 @@ $orderId = isset($data['order_id']) ? (int)$data['order_id'] : null;
 $workerId = isset($data['worker_id']) ? (int)$data['worker_id'] : null;
 
 if (!$orderId || !$workerId) {
-    echo json_encode(['success' => false, 'message' => 'Неверные данные']);
+    echo json_encode(['success' => false, 'message' => 'Incorrect data']);
     exit();
 }
 
@@ -25,7 +25,7 @@ $stmt->bind_param("ii", $workerId, $orderId);
 if ($stmt->execute()) {
     echo json_encode(['success' => true]);
 } else {
-    echo json_encode(['success' => false, 'message' => 'Ошибка запроса: ' . $stmt->error]);
+    echo json_encode(['success' => false, 'message' => 'Request error: ' . $stmt->error]);
 }
 
 $stmt->close();

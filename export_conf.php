@@ -1,43 +1,48 @@
 <?php
-// Настройки подключения к базе данных
+// Настройки подключения
 $host = "localhost";
 $username = "root";
 $password = "";
 $database = "balti24db";
 
-// Подключение к базе данных
+// Подключение
 $conn = new mysqli($host, $username, $password, $database);
-
-// Проверка подключения
 if ($conn->connect_error) {
     die("Ошибка подключения: " . $conn->connect_error);
 }
 
-// Запрос к таблице
-$table = "completetask"; // Укажите имя вашей таблицы
+// Выбор таблицы
+$table = $conn->real_escape_string("completetask");
+
+// Запрос
 $query = "SELECT * FROM $table";
 $result = $conn->query($query);
 
-// Установка заголовков для скачивания CSV
+// Проверка наличия данных
+if ($result->num_rows == 0) {
+    echo "Нет данных для экспорта";
+    exit();
+}
+
+// Заголовки CSV
 header('Content-Type: text/csv; charset=utf-8');
-header('Content-Disposition: attachment; filename=data.csv');
+header('Content-Disposition: attachment; filename=completetask.csv');
 
 // Открытие файла в памяти
 $output = fopen('php://output', 'w');
+echo "\xEF\xBB\xBF"; // Добавляет BOM для корректного отображения в Excel
 
-// Добавление заголовков столбцов
-if ($result->num_rows > 0) {
-    $columns = $result->fetch_fields();
-    $headers = [];
-    foreach ($columns as $column) {
-        $headers[] = $column->name;
-    }
-    fputcsv($output, $headers);
+// Запись заголовков
+$columns = $result->fetch_fields();
+$headers = [];
+foreach ($columns as $column) {
+    $headers[] = $column->name;
+}
+fputcsv($output, $headers);
 
-    // Добавление строк данных
-    while ($row = $result->fetch_assoc()) {
-        fputcsv($output, $row);
-    }
+// Запись данных
+while ($row = $result->fetch_assoc()) {
+    fputcsv($output, $row);
 }
 
 // Закрытие соединения

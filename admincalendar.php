@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Календарь занятости сотрудников</title>
+  <title>Employee employment calendar</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="stylesindex.css">
 
@@ -26,11 +26,11 @@ if (!isset($_COOKIE['admin_id'])) {
         <div class="logo">Balti24</div>
         <nav class="nav">
             <ul>
-                <li><a href="admintask.php">Таблица заказов</a></li>
-                <li><a href="admincalendar.php">Календарь работников</a></li>
-                <li><a href="adminuser.php">Таблица пользователей</a></li>
-                <li><a href="adminworker.php">Таблица работников</a></li>
-                <li><a href="admincomplete.php">Выполненые заказы</a></li>
+                <li><a href="admintask.php">Table of orders</a></li>
+                <li><a href="admincalendar.php">Employee Calendar</a></li>
+                <li><a href="adminuser.php">Users table</a></li>
+                <li><a href="adminworker.php">Table of employees</a></li>
+                <li><a href="admincomplete.php">Completed orders</a></li>
             </ul>
         </nav>
         <p class="text-center"><a href="exit_admin_conf.php" class="btn btn-link">Log out</a></p>
@@ -38,23 +38,23 @@ if (!isset($_COOKIE['admin_id'])) {
 </header>
 
 <div class="filters">
-    <label for="filterEmployee">Сотрудник:</label>
+    <label for="filterEmployee">Employee:</label>
     <input type="number" id="filterEmployee" placeholder="ID сотрудника">
 
-    <label for="filterUser">Пользователь:</label>
+    <label for="filterUser">User:</label>
     <input type="number" id="filterUser" placeholder="ID пользователя">
 
-    <label for="filterDate">Дата:</label>
+    <label for="filterDate">Date:</label>
     <input type="date" id="filterDate">
 
-    <label for="filterType">Сфера работы:</label>
+    <label for="filterType">Area of work:</label>
     <select id="filterType">
-        <option value="">Все</option>
+        <option value="">All</option>
         <option value="Cleaning">Cleaning</option>
         <option value="Repair">Repair</option>
     </select>
 
-    <button id="applyFilters">Применить</button>
+    <button id="applyFilters">Apply</button>
 </div>
 
 
@@ -63,40 +63,40 @@ if (!isset($_COOKIE['admin_id'])) {
 
 <!-- Модальное окно для добавления события -->
 <div id="eventModal" style="display:none; position: fixed; top: 20%; left: 30%; width: 300px; background: #fff; border: 1px solid #ccc; padding: 20px;">
-    <h3>Добавить событие</h3>
+    <h3>Add an order</h3>
     <form id="eventForm">
-        <label for="employeeId">ID сотрудника:</label>
+        <label for="employeeId">employee ID:</label>
         <input type="number" id="employeeId" name="employee_id" required><br><br>
         
-        <label for="orderId">ID заказа:</label>
+        <label for="orderId">order ID:</label>
         <input type="number" id="orderId" name="order_id" required><br><br>
 
-        <label for="eventType">Сфера работы:</label>
+        <label for="eventType">Area of work:</label>
         <select id="eventType" name="type" required>
             <option value="Cleaning">Cleaning</option>
             <option value="Repair">Repair</option>
         </select><br><br>
 
-        <label for="userId">ID Пользователя:</label>
+        <label for="userId">user ID:</label>
         <input type="number" id="userId" name="user_id"required><br><br>
         
-        <label for="eventDate">Дата:</label>
+        <label for="eventDate">Date:</label>
         <input type="date" id="eventDate" name="date" required><br><br>
         
-        <label for="startTime">Время начала:</label>
+        <label for="startTime">Start time:</label>
         <input type="time" id="startTime" name="start_time" required><br><br>
         
-        <label for="endTime">Время окончания:</label>
+        <label for="endTime">End time :</label>
         <input type="time" id="endTime" name="end_time" required><br><br>
         
-        <button type="button" id="saveEvent">Сохранить</button>
-        <button type="button" id="closeModal">Отмена</button>
+        <button type="button" id="saveEvent">Save</button>
+        <button type="button" id="closeModal">Cancel</button>
     </form>
 </div>
 
 <footer class="footer">
     <div class="container">
-        <p>&copy; 2025 Balti24. Все права защищены.</p>
+        <p>&copy; 2025 Balti24. All rights reserved.</p>
     </div>
 </footer>
 
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
         eventDidMount: function(info) {
             info.el.addEventListener('contextmenu', function(e) {
                 e.preventDefault();
-                if (confirm("Удалить это событие?")) {
+                if (confirm("Delete this order?")) {
                     $.post('delete_event.php', { id: info.event.id }, function(response) {
                         alert(response);
                         calendar.refetchEvents();
@@ -123,19 +123,19 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             info.el.addEventListener('dblclick', function() {
-                let orderMatch = info.event.title.match(/Заказ (\d+)/);
-                let employeeMatch = info.event.title.match(/Сотр\. (\d+)/);
+                let orderMatch = info.event.title.match(/Order (\d+)/);
+                let employeeMatch = info.event.title.match(/Emp\. (\d+)/);
 
                 if (!orderMatch || !employeeMatch) {
-                    alert("Ошибка: не удалось получить ID заказа или сотрудника!");
+                    alert("Error: Failed to retrieve order or employee ID!");
                     return;
                 }
 
-                let newOrderId = prompt("Введите новый ID заказа:", orderMatch[1]);
-                let newEmployeeId = prompt("Введите новый ID сотрудника:", employeeMatch[1]);
-                let newStartTime = prompt("Введите новое время начала (HH:MM):", info.event.start.toISOString().substring(11, 16));
-                let newEndTime = prompt("Введите новое время окончания (HH:MM):", info.event.end.toISOString().substring(11, 16));
-                let newUserId = prompt("Введите новый ID пользователя:", info.event.extendedProps.user_id);
+                let newOrderId = prompt("Enter a new order ID:", orderMatch[1]);
+                let newEmployeeId = prompt("Enter the new employee ID:", employeeMatch[1]);
+                let newStartTime = prompt("Enter the new start time (HH:MM):", info.event.start.toISOString().substring(11, 16));
+                let newEndTime = prompt("Enter the new end time (HH:MM):", info.event.end.toISOString().substring(11, 16));
+                let newUserId = prompt("Enter a new user ID:", info.event.extendedProps.user_id);
 
                 if (newOrderId && newEmployeeId && newStartTime && newEndTime && newUserId) {
                     let data = {
@@ -201,7 +201,7 @@ document.getElementById("applyFilters").addEventListener("click", function() {
 
     var queryString = queryParams.length ? "?" + queryParams.join("&") : "";
 
-    console.log("Фильтр применяется с запросом:", queryString);
+    console.log("The filter is applied with a query:", queryString);
 
     calendar.setOption('events', 'get_events.php' + queryString);
 });

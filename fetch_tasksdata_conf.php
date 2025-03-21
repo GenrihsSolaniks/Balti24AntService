@@ -8,7 +8,7 @@ $query = "SELECT * FROM tasks";
 $result = $mysql->query($query);
 
 echo "<table>";
-echo "<tr><th>ID</th><th>User ID</th><th>Area</th><th>Phone</th><th>Address</th><th>City</th><th>Country</th><th>Date</th><th>Task</th><th>Additional</th><th>Worker</th><th>Status</th><th>Pause History</th><th>Action</th></tr>";
+echo "<tr><th>ID</th><th>User ID</th><th>Area</th><th>Phone</th><th>Address</th><th>City</th><th>Country</th><th>Date</th><th>Task</th><th>Additional</th><th>Worker</th><th>Status</th><th>Pause History</th><th>Action</th><th>Execution Time</th><th>Work Time</th><th>Road Time</th></tr>";
 
 // Определяем цвета для каждого статуса
 $statusColors = [
@@ -59,6 +59,23 @@ while ($row = $result->fetch_assoc()) {
         $pauseHistoryDisplay .= "Пауза с {$historyRow['pause_time']} до {$resumeTime}<br>";
     }
 
+    // Получаем первое и последнее время изменения статуса
+    $timeQuery = $mysql->prepare("
+    SELECT MIN(timestamp) AS start_time, MAX(timestamp) AS end_time FROM task_timestamps WHERE task_id = ?");
+    $timeQuery->bind_param("i", $row['id']);
+    $timeQuery->execute();
+    $timeResult = $timeQuery->get_result();
+    $timeRow = $timeResult->fetch_assoc();
+
+    // Вычисляем разницу во времени
+    $executionTime = "—";
+    if (!empty($timeRow['start_time']) && !empty($timeRow['end_time'])) {
+    $start = new DateTime($timeRow['start_time']);
+    $end = new DateTime($timeRow['end_time']);
+    $diff = $start->diff($end);
+    $executionTime = "{$diff->h} ч. {$diff->i} мин.";
+    }
+
     echo "<tr style='{$rowStyle}'>";
     echo "<td>{$row['id']}</td>";
     echo "<td>{$row['user_id']}</td>";
@@ -106,6 +123,47 @@ while ($row = $result->fetch_assoc()) {
         echo "<td>⏳ В процессе</td>";
     }
     
+    echo "<td>{$executionTime}</td>";
+
+    // Получаем время начала и окончания работы (4 → 5) и общее время заказа (2 → 7)
+$timeQuery = $mysql->prepare("
+SELECT 
+    MAX(CASE WHEN status = 2 THEN timestamp END) AS start_trip,
+    MAX(CASE WHEN status = 4 THEN timestamp END) AS start_work,
+    MAX(CASE WHEN status = 5 THEN timestamp END) AS end_work,
+    MAX(CASE WHEN status = 7 THEN timestamp END) AS end_trip
+FROM task_timestamps
+WHERE task_id = ?
+");
+$timeQuery->bind_param("i", $row['id']);
+$timeQuery->execute();
+$timeResult = $timeQuery->get_result();
+$timeRow = $timeResult->fetch_assoc();
+
+$workDuration = '—'; // Время работы (4 → 5)
+$tripDuration = '—'; // Общее время заказа (2 → 7)
+
+if ($timeRow['start_work'] && $timeRow['end_work']) {
+$start = strtotime($timeRow['start_work']);
+$end = strtotime($timeRow['end_work']);
+$duration = $end - $start;
+$hours = floor($duration / 3600);
+$minutes = floor(($duration % 3600) / 60);
+$workDuration = sprintf("%d ч %d мин", $hours, $minutes);
+}
+
+if ($timeRow['start_trip'] && $timeRow['end_trip']) {
+$start = strtotime($timeRow['start_trip']);
+$end = strtotime($timeRow['end_trip']);
+$duration = $end - $start;
+$hours = floor($duration / 3600);
+$minutes = floor(($duration % 3600) / 60);
+$tripDuration = sprintf("%d ч %d мин", $hours, $minutes);
+}
+
+// Добавляем два новых столбца
+echo "<td>{$workDuration}</td>";
+echo "<td>{$tripDuration}</td>";
 
     echo "</tr>";
 }

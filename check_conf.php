@@ -36,7 +36,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
-    die("Ошибка: Пользователь с таким логином уже существует.");
+    die("Error: A user with this login already exists.");
 }
 
 // Подготовленный запрос для вставки нового пользователя

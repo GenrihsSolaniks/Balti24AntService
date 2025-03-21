@@ -10,7 +10,7 @@ if (!isset($_COOKIE['admin_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Balti24 - Главная</title>
+    <title>Balti24 - AdminComplete</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="stylesindex.css">
 </head>
@@ -20,20 +20,21 @@ if (!isset($_COOKIE['admin_id'])) {
             <div class="logo">Balti24</div>
             <nav class="nav">
                 <ul>
-                    <li><a href="admintask.php">Таблица заказов</a></li>
-                    <li><a href="adminuser.php">Таблица пользователей</a></li>
-                    <li><a href="adminworker.php">Таблица работников</a></li>
-                    <li><a href="admincomplete.php">Выполненые заказы</a></li>
+                    <li><a href="admintask.php">Table of orders</a></li>
+                    <li><a href="admincalendar.php">Employee Calendar</a></li>
+                    <li><a href="adminuser.php">Users table</a></li>
+                    <li><a href="adminworker.php">Table of employees</a></li>
+                    <li><a href="admincomplete.php">Completed orders</a></li>
                 </ul>
             </nav>
             <p class="text-center"><a href="exit_admin_conf.php" class="btn btn-link">Log out</a></p>
         </div>
     </header>
-    <h1 style="text-align:center;">Real-Time MySQL Data</h1>
+    <h1 style="text-align:center;">Table of completed orders</h1>
 <div id="data-container">
     <!-- Таблица будет загружаться сюда -->
 </div>
-<button onclick="window.location.href='export_conf.php'">Скачать таблицу</button>
+<button onclick="window.location.href='export_conf.php'">Download csv table</button>
 
 <script>
     function updateOrderStatus(orderId, action) {
@@ -45,13 +46,13 @@ if (!isset($_COOKIE['admin_id'])) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Статус обновлён успешно!');
+                alert('Status updated successfully!');
                 location.reload(); // Обновляем страницу
             } else {
-                alert('Ошибка: ' + data.message);
+                alert('Error: ' + data.message);
             }
         })
-        .catch(error => console.error('Ошибка:', error));
+        .catch(error => console.error('Error:', error));
     }
     function loadData() {
     // Сохраняем текущие выбранные worker_id перед обновлением
@@ -88,13 +89,13 @@ if (!isset($_COOKIE['admin_id'])) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Работник успешно назначен на заказ!');
+            alert('Employee successfully assigned to an order!');
             location.reload(); // Перезагрузка страницы
         } else {
-            alert('Ошибка: ' + data.message);
+            alert('Error: ' + data.message);
         }
     })
-    .catch(error => console.error('Ошибка:', error));
+    .catch(error => console.error('Error:', error));
 }
 
     // Загружаем данные при загрузке страницы
@@ -105,7 +106,7 @@ if (!isset($_COOKIE['admin_id'])) {
 </script>
         <footer class="footer">
             <div class="container">
-                <p>&copy; 2025 Balti24. Все права защищены.</p>
+                <p>&copy; 2025 Balti24. All rights reserved.</p>
             </div>
         </footer>
 </body>

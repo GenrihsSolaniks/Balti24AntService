@@ -6,6 +6,7 @@ session_start();
 $login = filter_var(trim($_POST['login']), FILTER_SANITIZE_SPECIAL_CHARS);
 $password = filter_var(trim($_POST['password']), FILTER_SANITIZE_SPECIAL_CHARS);
 
+
 // Хешируем пароль, если требуется
 //$password = md5($password."qweqweqwe123");
 

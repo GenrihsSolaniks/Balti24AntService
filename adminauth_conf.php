@@ -20,7 +20,7 @@ $mysql = new mysqli('localhost', 'root', '', 'balti24db');
 
 // Проверяем подключение
 if ($mysql->connect_error) {
-    die("Ошибка подключения: " . $mysql->connect_error);
+    die("Connection error: " . $mysql->connect_error);
 }
 
 // Используем подготовленный запрос для защиты от SQL-инъекций

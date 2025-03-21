@@ -34,12 +34,12 @@ if (isset($_COOKIE['user'])) {
         <div class="row">
             <div class="col">
                 <h1>Registration form</h1>
-                <form action="check_conf.php" method="post">
-                    <input type="text" class="form-control" name="login" id="login" placeholder="Enter your login" required><br>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="Enter your name" required><br>
-                    <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required><br>
-                    <button class="btn btn-success" type="submit">Sign up</button>
-                </form>
+                <h3>Please choose your type of account</h3>
+                <ul>
+                    <li><a href="compregister.html">Юридическое лицо</a></li>
+                    <li><a href="indregister.html">Физическое лицо</a></li>
+                </ul>
+               
             </div>
             <div class="col">
                 <h1>Authorization</h1>

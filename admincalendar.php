@@ -58,8 +58,9 @@ if (!isset($_COOKIE['admin_id'])) {
 </div>
 
 
-
+<div id="workerInfo" class="container mt-4"></div>
 <div id="calendar"></div>
+
 
 <!-- Модальное окно для добавления события -->
 <div id="eventModal" style="display:none; position: fixed; top: 20%; left: 30%; width: 300px; background: #fff; border: 1px solid #ccc; padding: 20px;">
@@ -189,6 +190,30 @@ document.addEventListener('DOMContentLoaded', function() {
 // ✅ Теперь обработчик фильтров будет работать
 document.getElementById("applyFilters").addEventListener("click", function() {
     var employee_id = document.getElementById("filterEmployee").value;
+    // Если выбран сотрудник, получаем его инфу
+    if (employee_id) {
+        fetch('get_worker_info.php?id=' + employee_id)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.success) {
+                    const info = data.worker;
+                    document.getElementById("workerInfo").innerHTML = `
+                        <div class="card p-3 shadow-sm">
+                            <h5>Employee information #${info.id}</h5>
+                            <p><strong>First Name:</strong> ${info.name}</p>
+                            <p><strong>Last Name:</strong> ${info.surname}</p>
+                            <p><strong>Area:</strong> ${info.type}</p>
+                            <p><strong>Phone:</strong> ${info.number}</p>
+                        </div>
+                    `;
+                } else {
+                    document.getElementById("workerInfo").innerHTML = "<p>Employee not found.</p>";
+                }
+            });
+    } else {
+        document.getElementById("workerInfo").innerHTML = ""; // Очистить при пустом ID
+    }
+
     var user_id = document.getElementById("filterUser").value;
     var date = document.getElementById("filterDate").value;
     var type = document.getElementById("filterType").value;

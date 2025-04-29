@@ -44,20 +44,26 @@ while ($row = $result->fetch_assoc()) {
             // Если пауза активна, показываем кнопку "Снять паузу"
             echo "<td><button onclick=\"togglePauseStatus({$row['id']})\">Снять паузу</button></td>";
         } else {
-            // Если пауза не активна, показываем две кнопки: "Поставить на паузу" и переход на следующий статус
+            // Если пауза не активна, показываем две кнопки
             $nextStatus = $row['status'] + 1;
             echo "<td>
-                    <button onclick=\"togglePauseStatus({$row['id']})\">Поставить на паузу</button>
-                    <button onclick=\"updateOrderStatus({$row['id']}, {$nextStatus})\">{$statusNames[$nextStatus]}</button>
-                  </td>";
+                <button onclick=\"togglePauseStatus({$row['id']})\">Поставить на паузу</button>
+                <button onclick=\"updateOrderStatus({$row['id']}, {$nextStatus})\">{$statusNames[$nextStatus]}</button>
+            </td>";
         }
+    } elseif ($row['status'] == 5) {
+        echo "<td>
+            <button onclick=\"window.open('http://127.0.0.1:5000/form?task_id={$row['id']}', '_blank')\">Акт о работе</button>
+            <button id='completeBtn-{$row['id']}' onclick='updateOrderStatus({$row['id']}, 6)' disabled>Выехал обратно</button>
+        </td>";
     } elseif ($row['status'] < 7) {
-        // Если статус не завершён и не равен 4, отображаем кнопку следующего статуса
+        // Остальные переходы
         $nextStatus = $row['status'] + 1;
         echo "<td><button onclick=\"updateOrderStatus({$row['id']}, {$nextStatus})\">{$statusNames[$nextStatus]}</button></td>";
     } else {
         echo "<td>✔ Завершён</td>";
     }
+    // Если статус 7 (Завершён), показываем только текст    
 
     echo "</tr>";
 }

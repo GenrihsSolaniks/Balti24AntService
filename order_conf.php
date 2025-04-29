@@ -19,6 +19,23 @@ $country = filter_var(trim($_POST['country']), FILTER_SANITIZE_SPECIAL_CHARS);
 $date = filter_var(trim($_POST['date']), FILTER_SANITIZE_SPECIAL_CHARS);
 $task = filter_var(trim($_POST['taskDescription']), FILTER_SANITIZE_SPECIAL_CHARS);
 $additional = filter_var(trim($_POST['details']), FILTER_SANITIZE_SPECIAL_CHARS);
+$uploadDir = 'uploads/';
+if (!is_dir($uploadDir)) {
+    mkdir($uploadDir, 0777, true); // создаем папку при необходимости
+}
+
+$photoPath = null;
+if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
+    $filename = time() . '_' . basename($_FILES['photo']['name']);
+    $targetFile = $uploadDir . $filename;
+
+    if (move_uploaded_file($_FILES['photo']['tmp_name'], $targetFile)) {
+        $photoPath = $targetFile;
+    } else {
+        die("Ошибка при загрузке файла.");
+    }
+}
+
 
 // Проверяем, заполнены ли обязательные поля
 if (empty($area) || empty($phone) || empty($address) || empty($city) || empty($country) || empty($date) || empty($task)) {
@@ -34,11 +51,11 @@ if ($mysql->connect_error) {
 }
 
 // Подготовленный запрос для вставки данных
-$stmt = $mysql->prepare("INSERT INTO tasks (user_id, area, phone, address, city, country, date, task, additional) 
-                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt = $mysql->prepare("INSERT INTO tasks (user_id, area, phone, address, city, country, date, task, additional, photo_path)
+                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 // Связываем параметры
-$stmt->bind_param("issssssss", $user_id, $area, $phone, $address, $city, $country, $date, $task, $additional);
+$stmt->bind_param("isssssssss", $user_id, $area, $phone, $address, $city, $country, $date, $task, $additional, $photoPath);
 
 // Выполняем запрос
 if (!$stmt->execute()) {

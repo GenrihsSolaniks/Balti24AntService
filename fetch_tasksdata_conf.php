@@ -8,7 +8,7 @@ $query = "SELECT * FROM tasks";
 $result = $mysql->query($query);
 
 echo "<table>";
-echo "<tr><th>ID</th><th>User ID</th><th>Area</th><th>Phone</th><th>Address</th><th>City</th><th>Country</th><th>Date</th><th>Task</th><th>Additional</th><th>Worker</th><th>Status</th><th>Pause History</th><th>Action</th><th>Execution Time</th><th>Work Time</th><th>Road Time</th></tr>";
+echo "<tr><th>ID</th><th>User ID</th><th>Area</th><th>Phone</th><th>Address</th><th>City</th><th>Country</th><th>Date</th><th>Task</th><th>Additional</th><th>Photo</th><th>Worker</th><th>Status</th><th>Pause History</th><th>Action</th><th>Execution Time</th><th>Work Time</th><th>Road Time</th></tr>";
 
 // Определяем цвета для каждого статуса
 $statusColors = [
@@ -87,6 +87,17 @@ while ($row = $result->fetch_assoc()) {
     echo "<td>{$row['date']}</td>";
     echo "<td>{$row['task']}</td>";
     echo "<td>{$row['additional']}</td>";
+
+    // Выводим фото, если оно есть
+    if (!empty($row['photo_path']) && file_exists($row['photo_path'])) {
+        echo "<td>
+        <a href='{$row['photo_path']}' target='_blank'>
+            <img src='{$row['photo_path']}' alt='Фото' style='max-width:100px; max-height:100px;'>
+        </a>
+      </td>";
+    } else {
+        echo "<td>—</td>";
+    }
 
     // Имя работника
     if (!empty($row['worker_id'])) {

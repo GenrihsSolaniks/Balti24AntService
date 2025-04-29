@@ -33,7 +33,7 @@ if (!isset($_COOKIE['user'])) {
         <p class="text-center"><a href="exit_conf.php" class="btn btn-link">Log out</a></p>
 
         <div class="app-container">
-            <form action="order_conf.php" method="post">
+            <form action="order_conf.php" method="post" enctype="multipart/form-data">
                 <div class="form-group mb-3">
                     <label for="serviceArea">Select Service Area *</label>
                     <select id="serviceArea" name="ServiceArea" class="form-control" required>
@@ -84,7 +84,7 @@ if (!isset($_COOKIE['user'])) {
 
                 <div class="form-group mb-3">
                     <label for="file">Attach a Photo</label>
-                    <input id="file" type="file" class="form-control">
+                    <input id="file" type="file" class="form-control" name="photo">
                 </div>
 
                 <div class="form-group mb-3">

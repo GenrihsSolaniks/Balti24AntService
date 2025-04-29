@@ -35,8 +35,7 @@ if (!isset($_COOKIE['admin_id'])) {
 <div id="data-container">
     <!-- Таблица будет загружаться сюда -->
 </div>
-<button onclick="window.location.href='export_conf.php'">Download csv table</button>
-
+<a href="download_act.php?akta_id=1">⬇️ Lejupielādēt no DB</a>
 <script>
     function updateOrderStatus(orderId, action) {
         fetch('update_order_status_conf.php', {
@@ -64,7 +63,7 @@ if (!isset($_COOKIE['admin_id'])) {
 
     // Загружаем новые данные
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", "admincom_conf.php", true);
+    xhr.open("GET", "adminacts_conf.php", true);
     xhr.onload = function () {
         if (this.status === 200) {
             document.getElementById('data-container').innerHTML = this.responseText;

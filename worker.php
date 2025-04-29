@@ -61,15 +61,42 @@ function loadTasks() {
     fetch('workertask_conf.php')
         .then(response => response.text())
         .then(data => {
-            let container = document.getElementById('tasks-container');
+            const container = document.getElementById('tasks-container');
             if (container) {
                 container.innerHTML = data;
-            } else {
-                console.error("Ошибка: не найден элемент с ID 'tasks-container'.");
+
+                // После отрисовки в DOM — подключаем обработчики
+                setTimeout(() => {
+                    // 1. Включаем нужные кнопки из localStorage
+                    document.querySelectorAll('[id^="completeBtn-"]').forEach(button => {
+                        const orderId = button.id.split('-')[1];
+                        if (localStorage.getItem('act_shown_' + orderId) === '1') {
+                            button.disabled = false;
+                        }
+                    });
+
+                    // 2. Назначаем обработчики кнопок вручную
+                    document.querySelectorAll('[id^="openActBtn-"]').forEach(btn => {
+                        const id = btn.id.split('-')[1];
+                        btn.onclick = () => openWorkAct(id);
+                    });
+
+                    document.querySelectorAll('[id^="updateBtn-"]').forEach(btn => {
+                        const id = btn.id.split('-')[1];
+                        const action = btn.getAttribute("data-action");
+                        btn.onclick = () => updateOrderStatus(id, action);
+                    });
+
+                    document.querySelectorAll('[id^="pauseBtn-"]').forEach(btn => {
+                        const id = btn.id.split('-')[1];
+                        btn.onclick = () => togglePauseStatus(id);
+                    });
+                }, 100);
             }
         })
         .catch(error => console.error('Ошибка загрузки задач:', error));
 }
+
 
 // Функция принятия заказа
 function acceptOrder(orderId) {
@@ -101,6 +128,20 @@ function togglePauseStatus(orderId) {
     })
     .catch(error => console.error("Ошибка запроса:", error));
 }
+
+function openWorkAct(orderId) {
+    const win = window.open(`http://127.0.0.1:5000/form?task_id=${orderId}`, '_blank');
+    const check = setInterval(() => {
+        if (win.closed) {
+            clearInterval(check);
+            const btn = document.getElementById('completeBtn-' + orderId);
+            if (btn) btn.disabled = false;
+        }
+    }, 500);
+}
+
+
+
 
 // Обновление данных каждые 5 секунд
 setInterval(loadTasks, 5000);

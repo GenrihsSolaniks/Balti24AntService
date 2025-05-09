@@ -1,0 +1,160 @@
+/* Установка фона сайта и цвета текста */
+body {
+    background-color: #ffffff; /* Белый фон */
+    color: #000000; /* Чёрный текст */
+}
+
+form {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+:root {
+    --primary-color: #1b6ec2;
+    --primary-hover-color: #145a99;
+    --primary-border-color: #1861ac;
+    --secondary-color: #258cfb;
+    --error-color: #e50000;
+    --success-color: #26b050;
+}
+
+a, .btn-link {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+a:hover, .btn-link:hover {
+    color: var(--primary-hover-color);
+    text-decoration: underline;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: var(--primary-color);
+    border-color: var(--primary-border-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover-color);
+    border-color: var(--primary-hover-color);
+}
+
+.app-container {
+    margin-top: 2rem;
+    padding: 2rem;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f9f6f4; /* Цвет фона страницы из логотипа */
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    background: #a0341c; /* Красно-коричневый цвет из логотипа */
+    color: #fff;
+    padding: 20px 0;
+}
+
+.header .logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 15px;
+}
+
+.nav ul li {
+    display: inline;
+}
+
+.nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.hero {
+    background: #f9f6f4; /* Светлый цвет из логотипа */
+    color: #a0341c; /* Красно-коричневый текст */
+    text-align: center;
+    padding: 100px 0;
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+
+.hero .btn {
+    background: #5a8a8a; /* Голубоватый цвет из логотипа */
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 18px;
+    border-radius: 5px;
+}
+
+.services {
+    padding: 50px 0;
+    background: #f9f6f4; /* Светлый фон */
+}
+
+.services h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 32px;
+    color: #a0341c; /* Заголовок в красно-коричневом цвете */
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.service-item {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.service-item h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #5a8a8a; /* Голубоватый текст */
+}
+
+.footer {
+    background: #a0341c; /* Фон подвала из логотипа */
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+}

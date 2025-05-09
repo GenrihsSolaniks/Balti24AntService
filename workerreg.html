@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balti24 Registration</title>
+    <link rel="stylesheet" href="adminstyles.css">
+</head>
+<body>
+    <form class="registration-form" method="POST" action="workercheck_conf.php">
+        <h1>Workers registration form</h1>
+        <input type="text" class="form-control" name="login" id="login" placeholder="Enter your login" required><br>
+        <input type="text" class="form-control" name="name" id="name" placeholder="Enter your first name" required><br>
+        <input type="text" class="form-control" name="surname" id="surname" placeholder="Enter your last name" required><br>
+        <input type="text" class="form-control" name="number" id="number" placeholder="Enter your phone number" required><br>
+        <select id="type" name="type" class="form-control" required>
+            <option value disabled selected>Please Select your work field</option>
+            <option value="Cleaning">Cleaning</option>
+            <option value="Repair">Repair</option>
+        </select>
+        <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required><br>
+        <input type="password" class="form-control" name="checkword" id="checkword" placeholder="Enter your checkword" required><br>
+        <button type="submit">Sign up</button><br>
+    </form>
+    <footer>
+        &copy; 2025 Balti24. Все права защищены.
+    </footer>
+</body>
+</html>

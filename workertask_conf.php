@@ -52,10 +52,22 @@ while ($row = $result->fetch_assoc()) {
             </td>";
         }
     } elseif ($row['status'] == 5) {
-        echo "<td>
-            <button onclick=\"window.open('http://127.0.0.1:5000/form?task_id={$row['id']}', '_blank')\">Акт о работе</button>
-            <button id='completeBtn-{$row['id']}' onclick='updateOrderStatus({$row['id']}, 6)' disabled>Выехал обратно</button>
-        </td>";
+         echo "<td>
+        <input type=\"checkbox\" id=\"confirmCheck{$row['id']}\" onchange=\"toggleButton{$row['id']}()\">
+        <label for=\"confirmCheck{$row['id']}\"> Клиент согласен</label><br>
+        <button id=\"departButton{$row['id']}\" onclick=\"updateOrderStatus({$row['id']}, 6)\" disabled>Выехал обратно</button>
+
+        <script>
+            function toggleButton{$row['id']}() {
+                const checkbox = document.getElementById('confirmCheck{$row['id']}');
+                const button = document.getElementById('departButton{$row['id']}');
+                button.disabled = !checkbox.checked;
+            }
+        </script>
+    </td>";
+    } elseif ($row['status'] == 6) {
+        // Если статус 6 (Выехал обратно), показываем кнопку "Приехал на базу"
+        echo "<td><button onclick=\"updateOrderStatus({$row['id']}, 7)\">Приехал на базу</button></td>";
     } elseif ($row['status'] < 7) {
         // Остальные переходы
         $nextStatus = $row['status'] + 1;

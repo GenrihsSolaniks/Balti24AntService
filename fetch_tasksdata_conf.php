@@ -136,47 +136,105 @@ while ($row = $result->fetch_assoc()) {
     
     echo "<td>{$executionTime}</td>";
 
-    // Получаем время начала и окончания работы (4 → 5) и общее время заказа (2 → 7)
-$timeQuery = $mysql->prepare("
-SELECT 
-    MAX(CASE WHEN status = 2 THEN timestamp END) AS start_trip,
-    MAX(CASE WHEN status = 4 THEN timestamp END) AS start_work,
-    MAX(CASE WHEN status = 5 THEN timestamp END) AS end_work,
-    MAX(CASE WHEN status = 7 THEN timestamp END) AS end_trip
-FROM task_timestamps
-WHERE task_id = ?
-");
-$timeQuery->bind_param("i", $row['id']);
-$timeQuery->execute();
-$timeResult = $timeQuery->get_result();
-$timeRow = $timeResult->fetch_assoc();
+        // Получаем время начала и окончания работы (4 → 5) и общее время заказа (2 → 7)
+    $timeQuery = $mysql->prepare("
+    SELECT 
+        MAX(CASE WHEN status = 2 THEN timestamp END) AS start_trip,
+        MAX(CASE WHEN status = 4 THEN timestamp END) AS start_work,
+        MAX(CASE WHEN status = 5 THEN timestamp END) AS end_work,
+        MAX(CASE WHEN status = 7 THEN timestamp END) AS end_trip
+    FROM task_timestamps
+    WHERE task_id = ?
+    ");
+        $timeQuery->bind_param("i", $row['id']);
+        $timeQuery->execute();
+        $timeResult = $timeQuery->get_result();
+        $timeRow = $timeResult->fetch_assoc();
 
-$workDuration = '—'; // Время работы (4 → 5)
-$tripDuration = '—'; // Общее время заказа (2 → 7)
+        $workDuration = '—'; // Время работы (4 → 5)
+        $tripDuration = '—'; // Общее время заказа (2 → 7)
 
-if ($timeRow['start_work'] && $timeRow['end_work']) {
-$start = strtotime($timeRow['start_work']);
-$end = strtotime($timeRow['end_work']);
-$duration = $end - $start;
-$hours = floor($duration / 3600);
-$minutes = floor(($duration % 3600) / 60);
-$workDuration = sprintf("%d ч %d мин", $hours, $minutes);
-}
+    if ($timeRow['start_work'] && $timeRow['end_work']) {
+        $start = strtotime($timeRow['start_work']);
+        $end = strtotime($timeRow['end_work']);
+        $duration = $end - $start;
+        $hours = floor($duration / 3600);
+        $minutes = floor(($duration % 3600) / 60);
+        $workDuration = sprintf("%d ч %d мин", $hours, $minutes);
+    }
 
-if ($timeRow['start_trip'] && $timeRow['end_trip']) {
-$start = strtotime($timeRow['start_trip']);
-$end = strtotime($timeRow['end_trip']);
-$duration = $end - $start;
-$hours = floor($duration / 3600);
-$minutes = floor(($duration % 3600) / 60);
-$tripDuration = sprintf("%d ч %d мин", $hours, $minutes);
-}
+    if ($timeRow['start_trip'] && $timeRow['end_trip']) {
+        $start = strtotime($timeRow['start_trip']);
+        $end = strtotime($timeRow['end_trip']);
+        $duration = $end - $start;
+        $hours = floor($duration / 3600);
+        $minutes = floor(($duration % 3600) / 60);
+        $tripDuration = sprintf("%d ч %d мин", $hours, $minutes);
+    }
 
-// Добавляем два новых столбца
-echo "<td>{$workDuration}</td>";
-echo "<td>{$tripDuration}</td>";
+    // Добавляем два новых столбца
+    echo "<td>{$workDuration}</td>";
+    echo "<td>{$tripDuration}</td>";
 
-    echo "</tr>";
+        echo "</tr>";
+    }
+
+
+// ===== Показ проблемных заказов =====
+$problemQuery = "SELECT * FROM problematic_tasks";
+$problemResult = $mysql->query($problemQuery);
+
+while ($row = $problemResult->fetch_assoc()) {
+    echo "<tr style='background-color: #ffcccc;'>"; // красный фон
+
+    echo "<td>{$row['id']} ⚠️</td>";
+    echo "<td>{$row['user_id']}</td>";
+    echo "<td>{$row['area']}</td>";
+    echo "<td><a href='https://wa.me/{$row['phone']}' target='_blank'>{$row['phone']}</a></td>";
+    echo "<td>{$row['address']}</td>";
+    echo "<td>{$row['city']}</td>";
+    echo "<td>{$row['country']}</td>";
+    echo "<td>{$row['date']}</td>";
+    echo "<td>{$row['task']}</td>";
+    echo "<td>{$row['additional']}</td>";
+
+    // Фото
+    if (!empty($row['photo_path']) && file_exists($row['photo_path'])) {
+        echo "<td>
+        <a href='{$row['photo_path']}' target='_blank'>
+            <img src='{$row['photo_path']}' alt='Фото' style='max-width:100px; max-height:100px;'>
+        </a>
+      </td>";
+    } else {
+        echo "<td>—</td>";
+    }
+
+    // Имя работника
+    if (!empty($row['worker_id'])) {
+        $workerQuery = $mysql->prepare("SELECT name FROM workers WHERE id = ?");
+        $workerQuery->bind_param("i", $row['worker_id']);
+        $workerQuery->execute();
+        $workerResult = $workerQuery->get_result();
+        $workerName = $workerResult->fetch_assoc()['name'] ?? 'Неизвестно';
+        echo "<td>{$workerName}</td>";
+    } else {
+        echo "<td>Не назначен</td>";
+    }
+
+    // Статус
+    echo "<td><b style='color: red;'>Проблемный (250)</b></td>";
+
+    // История пауз
+    echo "<td>—</td>";
+
+    // Действия
+    echo "<td><i>Требует проверки</i></td>";
+
+    // Время выполнения / работы / дороги — пока не считаем
+    echo "<td>—</td>";
+    echo "<td>—</td>";
+    echo "<td>—</td>";
+
 }
 echo "</table>";
 

@@ -35,6 +35,7 @@ if (!isset($_COOKIE['worker_id']) || empty($_COOKIE['worker_id'])) {
 </div>
 
 <script>
+let autoReload = null;
 document.addEventListener("DOMContentLoaded", function () {
     loadTasks();
 });
@@ -57,6 +58,71 @@ function updateOrderStatus(orderId, action) {
     .catch(error => console.error('Ошибка:', error));
 }
 
+function rebuildActionButtons(orderId) {
+    const cell = document.getElementById(`action-cell-${orderId}`);
+    if (!cell) return;
+
+    // Удаляем всё и создаём заново
+    cell.innerHTML = '';
+
+    const agreeBtn = document.createElement("button");
+    agreeBtn.textContent = "Клиент согласен";
+    agreeBtn.onclick = () => showConfirm(orderId);
+
+    const br = document.createElement("br");
+    const br2 = document.createElement("br");
+
+    const rejectBtn = document.createElement("button");
+    rejectBtn.textContent = "Клиент не согласен";
+    rejectBtn.style.color = "red";
+    rejectBtn.onclick = () => showRejectConfirm(orderId);
+
+    cell.appendChild(agreeBtn);
+    cell.appendChild(br);
+    cell.appendChild(br2);
+    cell.appendChild(rejectBtn);
+
+    autoReload = setInterval(loadTasks, 5000);
+}
+
+function showConfirm(orderId) {
+    clearInterval(autoReload);
+
+    const cell = document.getElementById(`action-cell-${orderId}`);
+    if (cell) {
+        cell.innerHTML = `
+            <div style="text-align:center;">
+                <p><b>Вы уверены?</b></p>
+                <button onclick="updateOrderStatus(${orderId}, 6)">Да</button>
+                <button onclick="cancelConfirm(${orderId})">Нет</button>
+            </div>
+        `;
+    }
+}
+
+function cancelConfirm(orderId) {
+     rebuildActionButtons(orderId);
+}
+
+function showRejectConfirm(orderId) {
+     clearInterval(autoReload);
+
+    const cell = document.getElementById(`action-cell-${orderId}`);
+    if (cell) {
+        cell.innerHTML = `
+            <div style="text-align:center;">
+                <p><b>Отметить как проблемный?</b></p>
+                <button style="color: red;" onclick="updateOrderStatus(${orderId}, 250)">Да</button>
+                <button onclick="cancelRejectConfirm(${orderId})">Нет</button>
+            </div>
+        `;
+    }
+}
+
+function cancelRejectConfirm(orderId) {
+     rebuildActionButtons(orderId);
+}
+
 // Функция загрузки задач для работника
 function loadTasks() {
     fetch('workertask_conf.php')
@@ -68,7 +134,7 @@ function loadTasks() {
 
                 // После отрисовки в DOM — подключаем обработчики
                 setTimeout(() => {
-                    // 1. Включаем нужные кнопки из localStorage
+                    // Включаем нужные кнопки из localStorage
                     document.querySelectorAll('[id^="completeBtn-"]').forEach(button => {
                         const orderId = button.id.split('-')[1];
                         if (localStorage.getItem('act_shown_' + orderId) === '1') {
@@ -76,7 +142,7 @@ function loadTasks() {
                         }
                     });
 
-                    // 2. Назначаем обработчики кнопок вручную
+                    // Назначаем обработчики кнопок вручную
                     document.querySelectorAll('[id^="openActBtn-"]').forEach(btn => {
                         const id = btn.id.split('-')[1];
                         btn.onclick = () => openWorkAct(id);
@@ -92,11 +158,22 @@ function loadTasks() {
                         const id = btn.id.split('-')[1];
                         btn.onclick = () => togglePauseStatus(id);
                     });
-                }, 100);
+
+                    // 🆕 Добавляем обработчики подтверждения
+                    document.querySelectorAll('.agree-btn').forEach(btn => {
+                        btn.onclick = () => showConfirm(btn.dataset.id);
+                    });
+
+                    document.querySelectorAll('.reject-btn').forEach(btn => {
+                        btn.onclick = () => showRejectConfirm(btn.dataset.id);
+                    });
+
+                }, 100); // <- Даем время DOM отрисоваться
             }
         })
         .catch(error => console.error('Ошибка загрузки задач:', error));
 }
+
 
 
 // Функция принятия заказа
@@ -145,7 +222,7 @@ function openWorkAct(orderId) {
 
 
 // Обновление данных каждые 5 секунд
-setInterval(loadTasks, 5000);
+autoReload = setInterval(loadTasks, 5000);
 </script>
 
 <footer class="footer">

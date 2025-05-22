@@ -42,6 +42,7 @@ if (!isset($_COOKIE['admin_id'])) {
                     <li><a href="adminuser.php">Users table</a></li>
                     <li><a href="adminworker.php">Table of employees</a></li>
                     <li><a href="admincomplete.php">Completed orders</a></li>
+                    <li><a href="adminacts.php">Акты</a></li>
                 </ul>
             </nav>
             <p class="text-center"><a href="exit_admin_conf.php" class="btn btn-link">Log out</a></p>

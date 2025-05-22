@@ -54,7 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'trip_time','work_time','signature_date','client_name','client_reg','site_address',
         'work_description','materials','equipment_status','worker_count',
         'direct_costs','vat','total_with_vat','client_signature','executor_signature',
-        'executor_id','executor_name','executor_reg'
+        'executor_id','executor_name','executor_reg',
+        'signature_image'
     ];
 
     $data = [];
@@ -90,8 +91,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt->execute()) {
             $insert_id = $stmt->insert_id;
-            header("Location: generate_pdf.php?id=$insert_id");
-            exit;
+            $step = 'saved';
+            $message = "Акт успешно сохранён!";
         } else {
             $error = "Ошибка сохранения: " . $stmt->error;
         }
@@ -128,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php endif; ?>
 
 <?php if ($step === 'show' && $task): ?>
-<form method="post" target="_blank">
+<form method="post" id="aktForm">
     <?php foreach ($task as $key => $val): ?>
         <input type="hidden" name="<?=htmlspecialchars($key)?>" value="<?=htmlspecialchars($val)?>">
     <?php endforeach; ?>
@@ -155,13 +156,101 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <label>VAT:<br><input type="number" step="0.01" name="vat" value="<?=htmlspecialchars($task['vat'] ?? '')?>"></label>
     <label>Total with VAT:<br><input type="number" step="0.01" name="total_with_vat" value="<?=htmlspecialchars($task['total_with_vat'] ?? '')?>"></label>
     <label>Client Signature:<br><input type="text" name="client_signature" value="<?=htmlspecialchars($task['client_signature'] ?? '')?>"></label>
+    <label>Client Signature (рисовать):</label>
+        <canvas id="signature-pad" width="300" height="100" style="border:1px solid #000;"></canvas><br>
+        <button type="button" onclick="clearSignature()">Очистить подпись</button>
+        <input type="hidden" name="signature_image" id="signature_image">
     <label>Executor Signature:<br><input type="text" name="executor_signature" value="<?=htmlspecialchars($task['executor_signature'] ?? '')?>"></label>
 
     <!-- ACTION BUTTONS -->
-    <button type="submit" name="action" value="preview">🔍 Preview PDF</button>
-    <button type="submit" name="action" value="edit">✏️ Edit</button>
-    <button type="submit" name="action" value="save">💾 Save & Download</button>
+    <button type="button" onclick="submitPreview()">🔍 Preview PDF</button>
+    <button type="submit" name="action" value="save">💾 Save</button>
 </form>
 <?php endif; ?>
+<script>
+let canvas = document.getElementById("signature-pad");
+let ctx = canvas.getContext("2d");
+let drawing = false;
+
+function captureSignature() {
+    const canvas = document.getElementById("signature-pad");
+    const signatureData = canvas.toDataURL("image/png");
+    document.getElementById("signature_image").value = signatureData;
+}
+
+// перед отправкой формы – сохраняем подпись
+document.querySelector("form").addEventListener("submit", captureSignature);
+
+document.querySelector("form").addEventListener("submit", function () {
+    const signature = document.getElementById("signature-pad").toDataURL("image/png");
+    document.getElementById("signature_image").value = signature;
+});
+
+canvas.addEventListener("mousedown", () => {
+    drawing = true;
+    ctx.beginPath();
+});
+canvas.addEventListener("mouseup", () => {
+    drawing = false;
+});
+canvas.addEventListener("mousemove", e => {
+    if (!drawing) return;
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.stroke();
+});
+
+canvas.addEventListener("touchstart", e => {
+    drawing = true;
+    ctx.beginPath();
+});
+canvas.addEventListener("touchend", () => drawing = false);
+canvas.addEventListener("touchmove", e => {
+    e.preventDefault();
+    let rect = canvas.getBoundingClientRect();
+    let touch = e.touches[0];
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
+    ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+    ctx.stroke();
+});
+
+function clearSignature() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+document.querySelector("form").addEventListener("submit", function () {
+    document.getElementById("signature_image").value = canvas.toDataURL("image/png");
+});
+
+function submitPreview() {
+    captureSignature(); // Сохраняем подпись в hidden-поле
+
+    const form = document.getElementById('aktForm');
+
+    // Создаём новое окно с уникальным именем
+    const previewWindow = window.open('', 'pdfPreview');
+
+    // Временно меняем целевое окно формы
+    const oldTarget = form.target;
+    form.target = 'pdfPreview';
+
+    // Добавляем hidden-поле, чтобы передать action
+    const hiddenInput = document.createElement('input');
+    hiddenInput.type = 'hidden';
+    hiddenInput.name = 'action';
+    hiddenInput.value = 'preview';
+    form.appendChild(hiddenInput);
+
+    // Отправляем форму
+    form.submit();
+
+    // Возвращаем старое значение target и убираем hidden поле
+    form.target = oldTarget;
+    hiddenInput.remove();
+}
+</script>
+
 </body>
 </html>

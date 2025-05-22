@@ -147,6 +147,35 @@ if ($stmt->execute()) {
             $stmt->bind_param("i", $orderId);
             $stmt->execute();
         }
+    }elseif ($action == 250) {
+        // Получаем общее время паузы
+    $pauseQuery = $mysql->prepare("
+        SELECT SUM(TIMESTAMPDIFF(SECOND, pause_time, resume_time)) AS total_pause_time
+        FROM pause_history
+        WHERE task_id = ?
+    ");
+    $pauseQuery->bind_param("i", $orderId);
+    $pauseQuery->execute();
+    $pauseResult = $pauseQuery->get_result();
+    $pauseRow = $pauseResult->fetch_assoc();
+    $totalPauseTime = $pauseRow['total_pause_time'] ?? 0;
+
+    // Вставляем в таблицу проблемных заказов
+    $insertQuery = "INSERT INTO problematic_tasks (id, user_id, area, address, city, country, date, task, additional, worker_id, status, total_pause_time)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $mysql->prepare($insertQuery);
+    $stmt->bind_param("iissssssssis", 
+        $order['id'], $order['user_id'], $order['area'], $order['address'], 
+        $order['city'], $order['country'], $order['date'], $order['task'], 
+        $order['additional'], $order['worker_id'], $action, $totalPauseTime);
+
+    if ($stmt->execute()) {
+        // Удаляем заказ из текущей таблицы
+        $deleteQuery = "DELETE FROM tasks WHERE id = ?";
+        $stmt = $mysql->prepare($deleteQuery);
+        $stmt->bind_param("i", $orderId);
+        $stmt->execute();
+    }
     }
 
     echo json_encode(['success' => true]);

@@ -52,22 +52,13 @@ while ($row = $result->fetch_assoc()) {
             </td>";
         }
     } elseif ($row['status'] == 5) {
-         echo "<td>
-        <input type=\"checkbox\" id=\"confirmCheck{$row['id']}\" onchange=\"toggleButton{$row['id']}()\">
-        <label for=\"confirmCheck{$row['id']}\"> Клиент согласен</label><br>
-        <button id=\"departButton{$row['id']}\" onclick=\"updateOrderStatus({$row['id']}, 6)\" disabled>Выехал обратно</button>
-
-        <script>
-            function toggleButton{$row['id']}() {
-                const checkbox = document.getElementById('confirmCheck{$row['id']}');
-                const button = document.getElementById('departButton{$row['id']}');
-                button.disabled = !checkbox.checked;
-            }
-        </script>
-    </td>";
+         echo "<td id='action-cell-{$row['id']}'>
+            <button class='agree-btn' data-id='{$row['id']}'>Клиент согласен</button><br><br>
+            <button class='reject-btn' data-id='{$row['id']}' style='color: red;'>Клиент не согласен</button>
+        </td>";
     } elseif ($row['status'] == 6) {
         // Если статус 6 (Выехал обратно), показываем кнопку "Приехал на базу"
-        echo "<td><button onclick=\"updateOrderStatus({$row['id']}, 7)\">Приехал на базу</button></td>";
+        echo "<td><button onclick=\"updateOrderStatus({$row['id']}, 7)\">Задание выполнено</button></td>";
     } elseif ($row['status'] < 7) {
         // Остальные переходы
         $nextStatus = $row['status'] + 1;

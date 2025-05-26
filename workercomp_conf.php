@@ -19,13 +19,14 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 echo "<table>";
-echo "<tr><th>ID</th><th>User ID</th><th>Area</th><th>Address</th><th>City</th><th>Country</th><th>Date</th><th>Task</th><th>Additional</th><th>Work Time</th> <!-- Уже с учетом паузы --><th>Road Time</th></tr>";
+echo "<tr><th>ID</th><th>User ID</th><th>Area</th><th>Email</th><th>Address</th><th>City</th><th>Country</th><th>Date</th><th>Task</th><th>Additional</th><th>Work Time</th> <!-- Уже с учетом паузы --><th>Road Time</th></tr>";
 
 while ($row = $result->fetch_assoc()) {
     echo "<tr>";
     echo "<td>{$row['id']}</td>";
     echo "<td>{$row['user_id']}</td>";
     echo "<td>{$row['area']}</td>";
+    echo "<td>{$row['email']}</td>";
     echo "<td>{$row['address']}</td>";
     echo "<td>{$row['city']}</td>";
     echo "<td>{$row['country']}</td>";

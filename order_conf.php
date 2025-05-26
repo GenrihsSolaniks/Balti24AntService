@@ -13,6 +13,7 @@ $user_id = $_SESSION['user_id'];
 // Фильтруем данные из формы
 $area = filter_var(trim($_POST['ServiceArea']), FILTER_SANITIZE_SPECIAL_CHARS);
 $phone = filter_var(trim($_POST['phone']), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
 $address = filter_var(trim($_POST['address']), FILTER_SANITIZE_SPECIAL_CHARS);
 $city = filter_var(trim($_POST['city']), FILTER_SANITIZE_SPECIAL_CHARS);
 $country = filter_var(trim($_POST['country']), FILTER_SANITIZE_SPECIAL_CHARS);
@@ -38,7 +39,7 @@ if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
 
 
 // Проверяем, заполнены ли обязательные поля
-if (empty($area) || empty($phone) || empty($address) || empty($city) || empty($country) || empty($date) || empty($task)) {
+if (empty($area) || empty($phone) || empty($email) || empty($address) || empty($city) || empty($country) || empty($date) || empty($task)) {
     die("Ошибка: все обязательные поля должны быть заполнены!");
 }
 
@@ -51,11 +52,11 @@ if ($mysql->connect_error) {
 }
 
 // Подготовленный запрос для вставки данных
-$stmt = $mysql->prepare("INSERT INTO tasks (user_id, area, phone, address, city, country, date, task, additional, photo_path)
-                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt = $mysql->prepare("INSERT INTO tasks (user_id, area, phone, email, address, city, country, date, task, additional, photo_path)
+                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 // Связываем параметры
-$stmt->bind_param("isssssssss", $user_id, $area, $phone, $address, $city, $country, $date, $task, $additional, $photoPath);
+$stmt->bind_param("issssssssss", $user_id, $area, $phone, $email, $address, $city, $country, $date, $task, $additional, $photoPath);
 
 // Выполняем запрос
 if (!$stmt->execute()) {

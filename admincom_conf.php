@@ -18,7 +18,7 @@ function parseDuration($duration) {
 }
 
 // Получение завершённых заказов
-$query = "SELECT id, user_id, area, address, city, country, date, task, additional, worker_id, 
+$query = "SELECT id, user_id, area, email, address, city, country, date, task, additional, worker_id, 
                  work_duration, total_pause_time, trip_duration 
           FROM completetask";
 $result = $mysql->query($query);
@@ -28,6 +28,7 @@ echo "<tr>
         <th>ID</th>
         <th>User ID</th>
         <th>Area</th>
+        <th>Email</th>
         <th>Address</th>
         <th>City</th>
         <th>Country</th>
@@ -44,6 +45,7 @@ while ($row = $result->fetch_assoc()) {
     echo "<td>{$row['id']}</td>";
     echo "<td>{$row['user_id']}</td>";
     echo "<td>{$row['area']}</td>";
+    echo "<td>{$row['email']}</td>";
     echo "<td>{$row['address']}</td>";
     echo "<td>{$row['city']}</td>";
     echo "<td>{$row['country']}</td>";

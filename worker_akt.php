@@ -17,11 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['task_id'])) {
         $error = "Некорректный task_id";
     } else {
         $stmt = $mysqli->prepare("
-            SELECT id, order_id, user_id, area, phone, address, city, country,
-                   date, task, additional, work_duration AS work_time,
-                   trip_duration AS trip_time, worker_id AS executor_id
-              FROM completetask
-             WHERE id = ?
+            SELECT id, order_id, user_id, area, phone, email, address, city, country,
+                date, task, additional, work_duration AS work_time,
+                trip_duration AS trip_time, worker_id AS executor_id
+            FROM completetask
+            WHERE id = ?
         ");
         $stmt->bind_param('i', $task_id);
         $stmt->execute();
@@ -40,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['task_id'])) {
             $task['executor_name'] = $emp['name'] ?? '';
             $task['executor_reg']  = $emp['reg_number'] ?? '';
             $task['site_address'] = "{$task['country']}, {$task['city']}, {$task['address']}";
+            $task['client_email'] = $task['email']; // ✅ БЕРЁМ ИЗ ЗАКАЗА
         } else {
             $error = "Задача не найдена.";
         }
@@ -51,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
     $fields = [
         'task_id','order_id','user_id','area','phone','address','city','country','date','task','additional',
-        'trip_time','work_time','signature_date','client_name','client_reg','site_address',
+        'trip_time','work_time','signature_date','client_name','client_reg','client_email','site_address',
         'work_description','materials','equipment_status','worker_count',
         'direct_costs','vat','total_with_vat','client_signature','executor_signature',
         'executor_id','executor_name','executor_reg',
@@ -147,6 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- EDITABLE FIELDS -->
     <label>Signature Date:<br><input type="date" name="signature_date" value="<?=htmlspecialchars($task['signature_date'] ?? '')?>" required></label>
     <label>Client Name:<br><input type="text" name="client_name" value="<?=htmlspecialchars($task['client_name'] ?? '')?>" required></label>
+    <label>Client Email:<br><input type="email" name="client_email" value="<?=htmlspecialchars($task['client_email'] ?? '')?>" readonly></label>
     <label>Client Reg:<br><input type="text" name="client_reg" value="<?=htmlspecialchars($task['client_reg'] ?? '')?>"></label>
     <label>Work Description:<br><textarea name="work_description" required><?=htmlspecialchars($task['work_description'] ?? '')?></textarea></label>
     <label>Materials:<br><textarea name="materials"><?=htmlspecialchars($task['materials'] ?? '')?></textarea></label>
@@ -178,21 +180,13 @@ function captureSignature() {
     document.getElementById("signature_image").value = signatureData;
 }
 
-// перед отправкой формы – сохраняем подпись
 document.querySelector("form").addEventListener("submit", captureSignature);
-
-document.querySelector("form").addEventListener("submit", function () {
-    const signature = document.getElementById("signature-pad").toDataURL("image/png");
-    document.getElementById("signature_image").value = signature;
-});
 
 canvas.addEventListener("mousedown", () => {
     drawing = true;
     ctx.beginPath();
 });
-canvas.addEventListener("mouseup", () => {
-    drawing = false;
-});
+canvas.addEventListener("mouseup", () => drawing = false);
 canvas.addEventListener("mousemove", e => {
     if (!drawing) return;
     ctx.lineWidth = 2;
@@ -220,37 +214,23 @@ function clearSignature() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-document.querySelector("form").addEventListener("submit", function () {
-    document.getElementById("signature_image").value = canvas.toDataURL("image/png");
-});
-
 function submitPreview() {
-    captureSignature(); // Сохраняем подпись в hidden-поле
-
+    captureSignature();
     const form = document.getElementById('aktForm');
-
-    // Создаём новое окно с уникальным именем
     const previewWindow = window.open('', 'pdfPreview');
-
-    // Временно меняем целевое окно формы
     const oldTarget = form.target;
     form.target = 'pdfPreview';
 
-    // Добавляем hidden-поле, чтобы передать action
     const hiddenInput = document.createElement('input');
     hiddenInput.type = 'hidden';
     hiddenInput.name = 'action';
     hiddenInput.value = 'preview';
     form.appendChild(hiddenInput);
 
-    // Отправляем форму
     form.submit();
-
-    // Возвращаем старое значение target и убираем hidden поле
     form.target = oldTarget;
     hiddenInput.remove();
 }
 </script>
-
 </body>
 </html>

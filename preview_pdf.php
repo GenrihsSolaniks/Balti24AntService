@@ -1,11 +1,16 @@
 <?php
 require_once('libs/tcpdf/tcpdf.php');
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+session_start();
+
+if (empty($_POST) && isset($_SESSION['akt_preview'])) {
+    $data = $_SESSION['akt_preview'];
+} elseif (!empty($_POST)) {
+    $data = $_POST;
+    $_SESSION['akt_preview'] = $_POST;
+} else {
     die("Нет данных для превью.");
 }
-
-$data = $_POST;
 
 $pdf = new TCPDF();
 $pdf->SetCreator('Balti24');
@@ -16,8 +21,7 @@ $pdf->AddPage();
 
 // Обработка подписи
 if (!empty($data['signature_image'])) {
-   $imgData = $data['signature_image'];
-    $imgData = str_replace('data:image/png;base64,', '', $imgData);
+    $imgData = str_replace('data:image/png;base64,', '', $data['signature_image']);
     $imgData = base64_decode($imgData);
     $signatureFile = 'temp_signatures/sign_' . time() . '.png';
 
@@ -25,7 +29,6 @@ if (!empty($data['signature_image'])) {
         mkdir('temp_signatures', 0777, true);
     }
 
-    // Сохраняем изображение без альфа-канала (прозрачности)
     $image = imagecreatefromstring($imgData);
     $bg = imagecreatetruecolor(imagesx($image), imagesy($image));
     $white = imagecolorallocate($bg, 255, 255, 255);
@@ -39,13 +42,13 @@ if (!empty($data['signature_image'])) {
     unlink($signatureFile);
 }
 
-// Контент PDF
 $html = <<<HTML
 <h2>Work Completion Report (Preview)</h2>
 <hr>
 <p><strong>Task ID:</strong> {$data['task_id']}</p>
 <p><strong>Signature Date:</strong> {$data['signature_date']}</p>
 <p><strong>Client:</strong> {$data['client_name']} ({$data['client_reg']})</p>
+<p><strong>Email:</strong> {$data['client_email']}</p>
 <p><strong>Site Address:</strong> {$data['site_address']}</p>
 <p><strong>Job Type:</strong> {$data['area']}</p>
 <p><strong>Description of Work:</strong><br>{$data['work_description']}</p>
@@ -61,7 +64,4 @@ $html = <<<HTML
 HTML;
 
 $pdf->writeHTML($html);
-
-header('Content-Type: application/pdf');
-header('Content-Disposition: inline; filename="preview_akt.pdf"');
 $pdf->Output('preview_akt.pdf', 'I');

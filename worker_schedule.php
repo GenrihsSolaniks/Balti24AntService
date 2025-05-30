@@ -24,7 +24,8 @@ $worker_id = $_SESSION['worker_id']; // Берём ID работника из с
             <ul>
                 <li><a href="worker.php">Таблица заказов</a></li>
                 <li><a href="worker_schedule.php">Моя занятость</a></li>
-                <li><a href="workercomplete.php">Выполненые заказы</a></li>
+                <li><a href="workercomplete.php">Выполненные заказы</a></li>
+                <li><a href="choose_template.php">Сгенерировать акт</a></li>
             </ul>
         </nav>
         <p class="text-center"><a href="exit_worker_conf.php" class="btn btn-link">Log out</a></p>

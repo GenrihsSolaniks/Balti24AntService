@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'work_description','materials','equipment_status','worker_count',
         'direct_costs','vat','total_with_vat','client_signature','executor_signature',
         'executor_id','executor_name','executor_reg',
-        'signature_image', 'payment_on_site', 'smart_id_confirmed', 'doc_front', 'doc_back', 'work_photo'
+        'signature_image', 'document_front', 'document_back', 'work_photo'
     ];
 
     $data = [];
@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Обработка загрузки файлов
-    $uploadFields = ['doc_front', 'doc_back', 'work_photo'];
+    $uploadFields = ['document_front', 'document_back', 'work_photo'];
     $uploadDir = 'uploads/';
     if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
 
@@ -83,6 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Кнопка предосмотра
     if ($action === 'preview') {
         $_SESSION['akt_preview'] = $data;
+        $_SESSION['template_type'] = 3; // <== ВАЖНО
         header('Location: preview_pdf.php');
         exit;
     }
@@ -124,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Work Act Form</title>
+    <title>Work Completion Report — Template 3 (Document Photo)</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
         label { display:block; margin: 8px 0; }
@@ -152,6 +153,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endforeach; ?>
     <input type="hidden" name="step" value="save">
 
+    <h1>Work Completion Report — Template 3 (Document Photo)</h1>
+
     <!-- READABLE FIELDS -->
     <label>Site Address:<br><input type="text" value="<?=htmlspecialchars($task['site_address'])?>" readonly></label>
     <label>Additional:<br><input type="text" value="<?=htmlspecialchars($task['additional'])?>" readonly></label>
@@ -174,15 +177,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <label>VAT:<br><input type="number" step="0.01" name="vat" value="<?=htmlspecialchars($task['vat'] ?? '')?>"></label>
     <label>Total with VAT:<br><input type="number" step="0.01" name="total_with_vat" value="<?=htmlspecialchars($task['total_with_vat'] ?? '')?>"></label>
     <label>Client Signature:<br><input type="text" name="client_signature" value="<?=htmlspecialchars($task['client_signature'] ?? '')?>"></label>
-    <!-- Способы подтверждения подписи -->
-    <label><input type="checkbox" name="payment_on_site" value="1" <?= !empty($task['payment_on_site']) ? 'checked' : '' ?>> Клиент заплатил на месте</label>
-
-    <label>Smart-ID (если есть):<br><input type="text" name="smart_id_confirmed" value="<?=htmlspecialchars($task['smart_id_confirmed'] ?? '')?>"></label>
-
-    <label>Фото документов (лицевая сторона):<br><input type="file" name="doc_front" accept="image/*"></label>
-    <label>Фото документов (оборотная сторона):<br><input type="file" name="doc_back" accept="image/*"></label>
-
-    <label>Фото выполненной работы:<br><input type="file" name="work_photo" accept="image/*"></label>
+    <label>ID Photo (Front):<br>
+        <input type="file" name="document_front" accept="image/*">
+    </label>
+    <label>ID Photo (Back):<br>
+        <input type="file" name="document_back" accept="image/*">
+    </label>
+    <label>Photo of completed work:<br><input type="file" name="work_photo" accept="image/*"></label>
     <label>Client Signature (рисовать):</label>
         <canvas id="signature-pad" width="300" height="100" style="border:1px solid #000;"></canvas><br>
         <button type="button" onclick="clearSignature()">Очистить подпись</button>

@@ -51,4 +51,33 @@ $html = <<<HTML
 HTML;
 
 $pdf->writeHTML($html);
+$pdf->Ln(10); // немного отступа
+
+if ($data['payment_on_site'] == 1) {
+    $pdf->writeHTML("<p><strong>Client Confirmation:</strong> Client paid on site.</p>");
+} elseif (!empty($data['smart_id_confirmed'])) {
+    $pdf->writeHTML("<p><strong>Client Confirmation:</strong> Smart-ID: {$data['smart_id_confirmed']}</p>");
+} elseif (!empty($data['document_front']) || !empty($data['document_back'])) {
+    $pdf->writeHTML("<p><strong>Client Confirmation:</strong> Verified by uploaded documents.</p>");
+}
+
+// === Фото выполненной работы ===
+if (!empty($data['work_photo']) && file_exists($data['work_photo'])) {
+    $pdf->AddPage();
+    $pdf->writeHTML("<h3>Photo of Completed Work</h3>");
+    $pdf->Image($data['work_photo'], '', '', 150);
+}
+
+// === Фотографии документов (для шаблона 3) ===
+if (!empty($data['document_front']) && file_exists($data['document_front'])) {
+    $pdf->AddPage();
+    $pdf->writeHTML("<h3>Document Front</h3>");
+    $pdf->Image($data['document_front'], '', '', 150);
+}
+if (!empty($data['document_back']) && file_exists($data['document_back'])) {
+    $pdf->AddPage();
+    $pdf->writeHTML("<h3>Document Back</h3>");
+    $pdf->Image($data['document_back'], '', '', 150);
+}
+
 $pdf->Output("akt_{$id}.pdf", 'I');

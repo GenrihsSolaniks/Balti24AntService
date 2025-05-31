@@ -56,13 +56,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'work_description','materials','equipment_status','worker_count',
         'direct_costs','vat','total_with_vat','client_signature','executor_signature',
         'executor_id','executor_name','executor_reg',
-        'signature_image', 'document_front', 'document_back', 'work_photo'
+        'signature_image', 'document_front', 'document_back', 'work_photos'
     ];
 
     $data = [];
     foreach ($fields as $f) {
         $data[$f] = $_POST[$f] ?? '';
     }
+
+    // === Обработка нескольких фото работ ===
+    $photo_paths = [];
+    $upload_dir = 'uploads/';
+    if (!file_exists($upload_dir)) mkdir($upload_dir, 0777, true);
+
+    if (!empty($_FILES['work_photos']['name'][0])) {
+        foreach ($_FILES['work_photos']['tmp_name'] as $i => $tmp_name) {
+            $name = basename($_FILES['work_photos']['name'][$i]);
+            $target = $upload_dir . time() . "_" . preg_replace('/[^a-zA-Z0-9_.-]/', '_', $name);
+            if (move_uploaded_file($tmp_name, $target)) {
+                $photo_paths[] = $target;
+            }
+        }
+    }
+    $data['work_photos'] = implode(',', $photo_paths); // Сохраняем как строку
 
     // Обработка загрузки файлов
     $uploadFields = ['document_front', 'document_back', 'work_photo'];
@@ -183,7 +199,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <label>ID Photo (Back):<br>
         <input type="file" name="document_back" accept="image/*">
     </label>
-    <label>Photo of completed work:<br><input type="file" name="work_photo" accept="image/*"></label>
+    <label>Photos of completed work:<br>
+        <input type="file" name="work_photos[]" accept="image/*" multiple>
+    </label>
+
     <label>Client Signature (рисовать):</label>
         <canvas id="signature-pad" width="300" height="100" style="border:1px solid #000;"></canvas><br>
         <button type="button" onclick="clearSignature()">Очистить подпись</button>
@@ -191,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <label>Executor Signature:<br><input type="text" name="executor_signature" value="<?=htmlspecialchars($task['executor_signature'] ?? '')?>"></label>
 
     <!-- ACTION BUTTONS -->
-    <button type="button" onclick="submitPreview()">🔍 Preview PDF</button>
+    <!--<button type="button" onclick="submitPreview()">🔍 Preview PDF</button>-->
     <button type="submit" name="action" value="save">💾 Save</button>
 </form>
 <?php endif; ?>

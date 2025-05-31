@@ -105,5 +105,6 @@ if (!empty($data['document_back']) && file_exists($data['document_back'])) {
     $pdf->writeHTML("<h3>Document Back</h3>");
     $pdf->Image($data['document_back'], '', '', 150);
 }
-$pdf->Output("akt_{$id}.pdf", 'I');
+$filename = isset($data['task_id']) ? "akt_{$data['task_id']}.pdf" : "akt_preview.pdf";
+$pdf->Output($filename, 'I');
 

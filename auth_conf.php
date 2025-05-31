@@ -44,7 +44,8 @@ if ($user === null) {
 $_SESSION['user_id'] = $user['id'];
 
 // Устанавливаем cookie с именем пользователя
-setcookie('user', $user['name'], time() + 3600, "/");
+$fullName = trim($user['name'] . ' ' . $user['lastname']);
+setcookie('user', $fullName, time() + 3600, "/");
 
 // Закрываем соединение с базой
 $stmt->close();

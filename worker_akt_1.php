@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'work_description','materials','equipment_status','worker_count',
         'direct_costs','vat','total_with_vat','client_signature','executor_signature',
         'executor_id','executor_name','executor_reg',
-        'signature_image', 'payment_on_site', 'work_photo'
+        'signature_image', 'payment_on_site', 'work_photos'
     ];
 
     $data = [];
@@ -66,14 +66,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }       
     }
 
-        // === ДОБАВЬ ЭТО СЮДА ===
-    if (!empty($_FILES['work_photo']['tmp_name'])) {
-        $uploadDir = 'uploads/';
-        if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
-        $filename = uniqid('work_photo_') . '.' . pathinfo($_FILES['work_photo']['name'], PATHINFO_EXTENSION);
-        move_uploaded_file($_FILES['work_photo']['tmp_name'], $uploadDir . $filename);
-        $data['work_photo'] = $uploadDir . $filename;
+    // === Обработка нескольких фото работ ===
+    $photo_paths = [];
+    $upload_dir = 'uploads/';
+    if (!file_exists($upload_dir)) mkdir($upload_dir, 0777, true);
+
+    if (!empty($_FILES['work_photos']['name'][0])) {
+        foreach ($_FILES['work_photos']['tmp_name'] as $i => $tmp_name) {
+            $name = basename($_FILES['work_photos']['name'][$i]);
+            $target = $upload_dir . time() . "_" . preg_replace('/[^a-zA-Z0-9_.-]/', '_', $name);
+            if (move_uploaded_file($tmp_name, $target)) {
+                $photo_paths[] = $target;
+            }
+        }
     }
+    $data['work_photos'] = implode(',', $photo_paths); // Сохраняем как строку
 
 
     // Кнопка предосмотра
@@ -170,10 +177,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </label>
 <input type="hidden" name="payment_on_site" value="1">
-<label>Photo of completed work:<br><input type="file" name="work_photo" accept="image/*"></label>
+<label>Photos of completed work:<br>
+  <input type="file" name="work_photos[]" accept="image/*" multiple>
+</label>
+
 <label>Executor Signature: <br><input type="text" name="executor_signature" value="<?=htmlspecialchars($task['executor_signature'] ?? '')?>"></label>
 <br><br>
-<button type="button" onclick="submitPreview()">🔍 Предпросмотр PDF</button>
+<!--<button type="button" onclick="submitPreview()">🔍 Предпросмотр PDF</button>-->
 <button type="submit" name="action" value="save">💾 Сохранить</button>
 </form>
 <?php endif; ?>

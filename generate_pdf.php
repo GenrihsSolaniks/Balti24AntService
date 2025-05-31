@@ -51,8 +51,21 @@ $html = <<<HTML
 HTML;
 
 $pdf->writeHTML($html);
-$pdf->Ln(10); // немного отступа
+$pdf->Ln(10);
 
+// === Множественные фото работы ===
+if (!empty($data['work_photos'])) {
+    $photos = explode(',', $data['work_photos']);
+    foreach ($photos as $photoPath) {
+        if (file_exists($photoPath)) {
+            $pdf->AddPage();
+            $pdf->writeHTML("<h3>Photo of Completed Work</h3>");
+            $pdf->Image($photoPath, '', '', 150);
+        }
+    }
+}
+
+// === Подтверждение клиента ===
 if ($data['payment_on_site'] == 1) {
     $pdf->writeHTML("<p><strong>Client Confirmation:</strong> Client paid on site.</p>");
 } elseif (!empty($data['smart_id_confirmed'])) {
@@ -61,14 +74,14 @@ if ($data['payment_on_site'] == 1) {
     $pdf->writeHTML("<p><strong>Client Confirmation:</strong> Verified by uploaded documents.</p>");
 }
 
-// === Фото выполненной работы ===
+// === Старое поле "одно фото работы", если нужно для совместимости ===
 if (!empty($data['work_photo']) && file_exists($data['work_photo'])) {
     $pdf->AddPage();
-    $pdf->writeHTML("<h3>Photo of Completed Work</h3>");
+    $pdf->writeHTML("<h3>Single Work Photo</h3>");
     $pdf->Image($data['work_photo'], '', '', 150);
 }
 
-// === Фотографии документов (для шаблона 3) ===
+// === Фото документов клиента ===
 if (!empty($data['document_front']) && file_exists($data['document_front'])) {
     $pdf->AddPage();
     $pdf->writeHTML("<h3>Document Front</h3>");

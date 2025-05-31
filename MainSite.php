@@ -22,6 +22,8 @@ if (!isset($_COOKIE['user'])) {
                 <ul>
                     <li><a href="index.html">Главная</a></li>
                     <li><a href="about.html">О нас</a></li>
+                    <li><a href="my_orders.php">Заказы</a></li>
+                    <li class="me-3"><a href="user_order.php">Время моих заказов</a></li>
                     <li><a href="MainSite.php">Заполнить форму заказа</a></li>
                     <li><a href="contact.html">Контакты</a></li>
                 </ul>

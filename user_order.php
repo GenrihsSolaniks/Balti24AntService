@@ -1,7 +1,8 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id'])) {
-    die("Ошибка: Необходима авторизация.");
+    header("Location: index.php");
+    exit();
 }
 
 $user_id = $_SESSION['user_id']; // Берём ID пользователя из сессии
@@ -22,10 +23,11 @@ $user_id = $_SESSION['user_id']; // Берём ID пользователя из 
             <div class="logo">Balti24</div>
             <nav class="nav">
                 <ul class="d-flex list-unstyled mb-0">
-                    <li class="me-3"><a href="index.html">Главная</a></li>
-                    <li class="me-3"><a href="about.html">О нас</a></li>
-                    <li class="me-3"><a href="MainSite.php">Заполнить форму заказа</a></li>
+                    <li><a href="index.html">Главная</a></li>
+                    <li><a href="about.html">О нас</a></li>
+                    <li><a href="my_orders.php">Заказы</a></li>
                     <li class="me-3"><a href="user_order.php">Время моих заказов</a></li>
+                    <li><a href="MainSite.php">Заполнить форму заказа</a></li>
                     <li><a href="contact.html">Контакты</a></li>
                 </ul>
             </nav>

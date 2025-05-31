@@ -48,8 +48,17 @@ $html = <<<HTML
 <p><strong>Executor:</strong> {$data['executor_name']} ({$data['executor_reg']})</p>
 <p><strong>Client Signature (text):</strong> {$data['client_signature']}</p>
 <p><strong>Executor Signature:</strong> {$data['executor_signature']}</p>
-HTML;
 
+HTML;
+$html .= "<p><strong>Client Confirmation:</strong> ";
+if ($data['payment_on_site'] == 1) {
+    $html .= "Client paid on site.";
+} elseif (!empty($data['smart_id_confirmed'])) {
+    $html .= "Smart-ID: {$data['smart_id_confirmed']}";
+} elseif (!empty($data['document_front']) || !empty($data['document_back'])) {
+    $html .= "Verified by uploaded documents.";
+}
+$html .= "</p>";
 $pdf->writeHTML($html);
 $pdf->Ln(10);
 
@@ -65,19 +74,12 @@ if (!empty($data['work_photos'])) {
     }
 }
 
-// === Подтверждение клиента ===
-if ($data['payment_on_site'] == 1) {
-    $pdf->writeHTML("<p><strong>Client Confirmation:</strong> Client paid on site.</p>");
-} elseif (!empty($data['smart_id_confirmed'])) {
-    $pdf->writeHTML("<p><strong>Client Confirmation:</strong> Smart-ID: {$data['smart_id_confirmed']}</p>");
-} elseif (!empty($data['document_front']) || !empty($data['document_back'])) {
-    $pdf->writeHTML("<p><strong>Client Confirmation:</strong> Verified by uploaded documents.</p>");
-}
 
 // === Старое поле "одно фото работы", если нужно для совместимости ===
 if (!empty($data['work_photo']) && file_exists($data['work_photo'])) {
     $pdf->AddPage();
     $pdf->writeHTML("<h3>Single Work Photo</h3>");
+    $pdf->Ln(5);
     $pdf->Image($data['work_photo'], '', '', 150);
 }
 
@@ -85,11 +87,13 @@ if (!empty($data['work_photo']) && file_exists($data['work_photo'])) {
 if (!empty($data['document_front']) && file_exists($data['document_front'])) {
     $pdf->AddPage();
     $pdf->writeHTML("<h3>Document Front</h3>");
+    $pdf->Ln(5);
     $pdf->Image($data['document_front'], '', '', 150);
 }
 if (!empty($data['document_back']) && file_exists($data['document_back'])) {
     $pdf->AddPage();
     $pdf->writeHTML("<h3>Document Back</h3>");
+    $pdf->Ln(5);
     $pdf->Image($data['document_back'], '', '', 150);
 }
 

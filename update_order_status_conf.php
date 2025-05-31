@@ -130,11 +130,11 @@ if ($stmt->execute()) {
         $totalPauseTime = $pauseRow['total_pause_time'] ?? 0; // Если NULL, то 0
 
         // Обновляем вставку в completetask
-        $insertQuery = "INSERT INTO completetask (id, user_id, area, address, city, country, date, task, additional, worker_id, status, work_duration, total_pause_time, trip_duration) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $insertQuery = "INSERT INTO completetask (id, user_id, area, email,address, city, country, date, task, additional, worker_id, status, work_duration, total_pause_time, trip_duration) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $mysql->prepare($insertQuery);
-        $stmt->bind_param("iissssssssisss", 
-        $order['id'], $order['user_id'], $order['area'], $order['address'], 
+        $stmt->bind_param("iisssssssssisss", 
+        $order['id'], $order['user_id'], $order['area'], $order['email'], $order['address'], 
         $order['city'], $order['country'], $order['date'], $order['task'], 
         $order['additional'], $order['worker_id'], $action, 
         $workDuration, $totalPauseTime, $tripDuration);

@@ -21,11 +21,11 @@ if (!isset($_COOKIE['admin_id'])) {
         <nav class="nav">
             <ul>
                 <li><a href="admintask.php">Table of orders</a></li>
-                <li><a href="admincalendar.php">Employee Calendar</a></li>
-                <li><a href="adminuser.php">Users table</a></li>
-                <li><a href="adminworker.php">Table of employees</a></li>
-                <li><a href="admincomplete.php">Completed orders</a></li>
-                <li><a href="adminacts.php">Акты</a></li>
+                    <li><a href="admincalendar.php">Employee Calendar</a></li>
+                    <li><a href="adminuser.php">Users table</a></li>
+                    <li><a href="adminworker.php">Table of employees</a></li>
+                    <li><a href="admincomplete.php">Completed orders</a></li>
+                    <li><a href="adminacts.php">Acts</a></li>
             </ul>
         </nav>
         <p class="text-center"><a href="exit_admin_conf.php" class="btn btn-link">Log out</a></p>

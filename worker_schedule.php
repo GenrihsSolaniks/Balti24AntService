@@ -22,24 +22,24 @@ $worker_id = $_SESSION['worker_id']; // Берём ID работника из с
         <div class="logo">Balti24</div>
         <nav class="nav">
             <ul>
-                <li><a href="worker.php">Таблица заказов</a></li>
-                <li><a href="worker_schedule.php">Моя занятость</a></li>
-                <li><a href="workercomplete.php">Выполненные заказы</a></li>
-                <li><a href="choose_template.php">Сгенерировать акт</a></li>
+                <li><a href=“worker.php”>Order table</a></li>
+                <li><a href=“worker_schedule.php”>My employment</a></li>
+                <li><a href=“workercomplete.php”>Completed orders</a></li>
+                <li><a href=“choose_template.php”>Generate an act</a></li>
             </ul>
         </nav>
         <p class="text-center"><a href="exit_worker_conf.php" class="btn btn-link">Log out</a></p>
     </div>
 </header>
     <div class="container mt-4">
-        <h2>Ваши запланированные заказы</h2>
-        <table class="table table-bordered">
+        <h2>Your Planned Orders</h2>
+        <table class=“table table-bordered”>
             <thead>
                 <tr>
-                    <th>ID заказа</th>
-                    <th>Дата</th>
-                    <th>Время начала</th>
-                    <th>Время окончания</th>
+                    <th>Order ID</th>
+                    <th>Date</th>
+                    <th>Start time</th>
+                    <th>End time</th>
                 </tr>
             </thead>
             <tbody id="scheduleTable">
@@ -68,7 +68,7 @@ $worker_id = $_SESSION['worker_id']; // Берём ID работника из с
 
 <footer class="footer">
     <div class="container">
-        <p>&copy; 2025 Balti24. Все права защищены.</p>
+        <p>&copy; 2025 Balti24. All rights reserved.</p>
     </div>
 </footer>
 </body>

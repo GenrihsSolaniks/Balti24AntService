@@ -109,9 +109,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->execute()) {
             $insert_id = $stmt->insert_id;
             $step = 'saved';
-            $message = "Акт успешно сохранён!";
+            $message = "The act has been successfully saved!";
         } else {
-            $error = "Ошибка сохранения: " . $stmt->error;
+            $error = "Save error: " . $stmt->error;
         }
     }
 
@@ -179,10 +179,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <label>Smart-ID (если есть):<br><input type="text" name="smart_id_confirmed" value="<?=htmlspecialchars($task['smart_id_confirmed'] ?? '')?>"></label>
 
-    <label>Фото документов (лицевая сторона):<br><input type="file" name="doc_front" accept="image/*"></label>
-    <label>Фото документов (оборотная сторона):<br><input type="file" name="doc_back" accept="image/*"></label>
+    <label>Photo of documents (front side):<br><input type="file" name="doc_front" accept="image/*"></label>
+    <label>Photo of documents (back side):<br><input type="file" name="doc_back" accept="image/*"></label>
 
-    <label>Фото выполненной работы:<br><input type="file" name="work_photo" accept="image/*"></label>
+    <label>Photo of the completed work:<br><input type="file" name="work_photo" accept="image/*"></label>
     <label>Client Signature (рисовать):</label>
         <canvas id="signature-pad" width="300" height="100" style="border:1px solid #000;"></canvas><br>
         <button type="button" onclick="clearSignature()">Очистить подпись</button>

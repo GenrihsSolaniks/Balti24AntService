@@ -37,7 +37,7 @@ $stmt->bind_param("iiiiissss", $employee_id, $event_id, $event_id, $end_time, $e
 $stmt->execute();
 $result = $stmt->get_result();
 if ($result->num_rows > 0) {
-    die("Ошибка: сотрудник уже занят в это время.");
+    die("Error: The employee is already busy at this time.");
 }
 
 // ✅ **Обновляем данные**
@@ -46,9 +46,9 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("iissisi", $order_id, $employee_id, $start_time, $end_time, $user_id, $type, $event_id);
 
 if ($stmt->execute()) {
-    echo "Событие обновлено!";
+    echo "The event has been updated!";
 } else {
-    echo "Ошибка при обновлении: " . $stmt->error;
+    echo "Update error: " . $stmt->error;
 }
 
 $conn->close();

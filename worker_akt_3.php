@@ -126,9 +126,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->execute()) {
             $insert_id = $stmt->insert_id;
             $step = 'saved';
-            $message = "Акт успешно сохранён!";
+            $message = "The act has been successfully saved!";
         } else {
-            $error = "Ошибка сохранения: " . $stmt->error;
+            $error = "Save error: " . $stmt->error;
         }
     }
 

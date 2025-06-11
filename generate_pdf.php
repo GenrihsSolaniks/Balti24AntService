@@ -2,7 +2,7 @@
 require_once('libs/tcpdf/tcpdf.php');
 $mysqli = new mysqli('localhost', 'root', '', 'balti24db');
 $id = intval($_GET['id'] ?? 0);
-if (!$id) die("Не указан ID акта");
+if (!$id) die("No act ID specified");
 
 $stmt = $mysqli->prepare("SELECT * FROM info_akts WHERE id = ?");
 $stmt->bind_param('i', $id);
@@ -12,8 +12,8 @@ if (!$data) die("Акт не найден");
 
 $pdf = new TCPDF();
 $pdf->SetCreator('Balti24');
-$pdf->SetAuthor('Автоматическая система');
-$pdf->SetTitle('Акт выполненных работ');
+$pdf->SetAuthor('Automatic system');
+$pdf->SetTitle('Acts of Completion');
 $pdf->SetFont('dejavusans', '', 12);
 $pdf->AddPage();
 

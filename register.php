@@ -22,11 +22,12 @@ if (isset($_COOKIE['user'])) {
             <div class="logo">Balti24</div>
             <nav class="nav">
                 <ul>
-                    <li class="me-3"><a href="index.html">Главная</a></li>
-                    <li class="me-3"><a href="about.html">О нас</a></li>
-                    <li class="me-3"><a href="MainSite.php">Заполнить форму заказа</a></li>
-                    <li class="me-3"><a href="user_order.php">Время моих заказов</a></li>
-                    <li class="me-3"><a href="contact.html">Контакты</a></l>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="my_orders.php">Orders</a></li>
+                    <li class="me-3"><a href="user_order.php">The time of my orders</a></li>
+                    <li><a href="MainSite.php">Fill out the order form</a></li>
+                    <li><a href="contact.html">Contacts</a></li>
                 </ul>
             </nav>
         </div>
@@ -34,7 +35,7 @@ if (isset($_COOKIE['user'])) {
 
     <div class="container form-container">
         <form action="register_conf.php" method="post">
-            <h2>Регистрация</h2>
+            <h2>Registration</h2>
             <label>Login:<br><input type="text" name="login" required></label>
             <label>Password:<br><input type="password" name="password" required></label>
             <label>Email:<br><input type="email" name="email" required></label>
@@ -44,8 +45,8 @@ if (isset($_COOKIE['user'])) {
 
             <label>Account Type:<br>
                 <select name="account_type" id="account_type" onchange="toggleCompanyFields()" required>
-                    <option value="individual">Физическое лицо</option>
-                    <option value="juridical">Юридическое лицо</option>
+                    <option value="individual">Physical person</option>
+                    <option value="juridical">Juridical person </option>
                 </select>
             </label>
 
@@ -56,13 +57,13 @@ if (isset($_COOKIE['user'])) {
                 <label>Company Address:<br><textarea name="company_address"></textarea></label>
             </div>
 
-            <button type="submit">Зарегистрироваться</button>
+            <button type="submit">Sign up</button>
         </form>
     </div>
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Balti24. Все права защищены.</p>
+            <p>&copy; 2025 Balti24. All rights reserved.</p>
         </div>
     </footer>
 

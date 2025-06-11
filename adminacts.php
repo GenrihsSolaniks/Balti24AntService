@@ -39,15 +39,15 @@ $result = $mysqli->query("SELECT id, task_id, client_name, signature_date, execu
         </div>
     </header>
 <div class="container mt-5">
-    <h2 class="mb-4">Акты выполненных работ</h2>
+    <h2 class="mb-4">Acts of completed works</h2>
     <table class="table table-bordered">
         <thead class="table-light">
             <tr>
                 <th>ID</th>
                 <th>Task ID</th>
-                <th>Дата подписи</th>
-                <th>Клиент</th>
-                <th>Исполнитель</th>
+                <th>Signature date</th>
+                <th>Client</th>
+                <th>Executor</th>
                 <th>PDF</th>
             </tr>
         </thead>

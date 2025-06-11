@@ -9,7 +9,7 @@ if (!isset($_COOKIE['worker_id']) || empty($_COOKIE['worker_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Balti24 - Главная</title>
+    <title>Balti24 - Main</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="stylesindex.css">
 </head>
@@ -19,10 +19,10 @@ if (!isset($_COOKIE['worker_id']) || empty($_COOKIE['worker_id'])) {
         <div class="logo">Balti24</div>
         <nav class="nav">
             <ul>
-                <li><a href="worker.php">Таблица заказов</a></li>
-                <li><a href="worker_schedule.php">Моя занятость</a></li>
-                <li><a href="workercomplete.php">Выполненные заказы</a></li>
-                <li><a href="choose_template.php">Сгенерировать акт</a></li>
+                <li><a href=“worker.php”>Order table</a></li>
+                <li><a href=“worker_schedule.php”>My employment</a></li>
+                <li><a href=“workercomplete.php”>Completed orders</a></li>
+                <li><a href=“choose_template.php”>Generate an act</a></li>
             </ul>
         </nav>
         <p class="text-center"><a href="exit_worker_conf.php" class="btn btn-link">Log out</a></p>
@@ -111,9 +111,9 @@ function showRejectConfirm(orderId) {
     if (cell) {
         cell.innerHTML = `
             <div style="text-align:center;">
-                <p><b>Отметить как проблемный?</b></p>
-                <button style="color: red;" onclick="updateOrderStatus(${orderId}, 250)">Да</button>
-                <button onclick="cancelRejectConfirm(${orderId})">Нет</button>
+                <p><b>Mark as problematic?</b></p>
+                <button style="color: red;" onclick="updateOrderStatus(${orderId}, 250)">Yes</button>
+                <button onclick="cancelRejectConfirm(${orderId})">No</button>
             </div>
         `;
     }
@@ -171,7 +171,7 @@ function loadTasks() {
                 }, 100); // <- Даем время DOM отрисоваться
             }
         })
-        .catch(error => console.error('Ошибка загрузки задач:', error));
+        .catch(error => console.error('Task loading error:', error));
 }
 
 
@@ -197,14 +197,14 @@ function togglePauseStatus(orderId) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log("Ответ от сервера:", data);
+        console.log("Response from the server:", data);
         if (data.success) {
             location.reload();
         } else {
-            alert("Ошибка от сервера: " + data.message);
+            alert("Server error: " + data.message);
         }
     })
-    .catch(error => console.error("Ошибка запроса:", error));
+    .catch(error => console.error("Request error:", error));
 }
 
 function openWorkAct(orderId) {
@@ -227,7 +227,7 @@ autoReload = setInterval(loadTasks, 5000);
 
 <footer class="footer">
     <div class="container">
-        <p>&copy; 2025 Balti24. Все права защищены.</p>
+         <p>&copy; 2025 Balti24. All rights reserved.</p>
     </div>
 </footer>
 

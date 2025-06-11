@@ -9,7 +9,7 @@ if (empty($_POST) && isset($_SESSION['akt_preview'])) {
     $data = $_POST;
     $_SESSION['akt_preview'] = $_POST;
 } else {
-    die("Нет данных для превью.");
+    die("No data for preview.");
 }
 
 // === Очистка старых временных файлов подписи ===

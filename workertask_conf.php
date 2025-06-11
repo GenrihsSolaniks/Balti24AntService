@@ -21,13 +21,13 @@ echo "<table>";
 echo "<tr><th>ID</th><th>Area</th><th>Address</th><th>Task</th><th>Status</th><th>Action</th></tr>";
 
 $statusNames = [
-    1 => 'Ожидание принятия',
-    2 => 'Выехал',
-    3 => 'Приехал к клиенту',
-    4 => 'Приступил к работе',
-    5 => 'Завершил работу',
-    6 => 'Выехал обратно',
-    7 => 'Приехал на базу'
+    1 => 'Awaiting acceptance',
+    2 => 'Departed',
+    3 => 'Arrived at clients place',
+    4 => 'Started work',
+    5 => 'Completed the job',
+    6 => 'Drove back',
+    7 => 'Arrived at base'
 ];
 
 while ($row = $result->fetch_assoc()) {

@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['task_id'])) {
             $task['client_email'] = $task['email'];
             $task['payment_on_site'] = '1'; // по умолчанию
         } else {
-            $error = "Задача не найдена.";
+            $error = "Task not found.";
         }
     }
 }

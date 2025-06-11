@@ -25,15 +25,15 @@ $statusColors = [
 
 // Определяем текстовое описание для каждого статуса
 $statusText = [
-    0 => 'Создан',
-    1 => 'Ожидание принятия',
-    2 => 'Выехал',
-    3 => 'Приехал к клиенту',
-    4 => 'Приступил к работе',
-    5 => 'Завершил работу',
-    6 => 'Выехал обратно',
-    7 => 'Приехал на базу',
-    8 => 'Потвеждаю выполнение заказа'
+    0 => 'Created',
+    1 => 'Awaiting acceptance',
+    2 => 'Departed',
+    3 => 'Arrived at client',
+    4 => 'Started work',
+    5 => 'Completed the job',
+    6 => 'Drove back',
+    7 => 'Arrived at base',
+    8 => 'Confirming order fulfillment'
 ];
 
 while ($row = $result->fetch_assoc()) {
@@ -42,9 +42,9 @@ while ($row = $result->fetch_assoc()) {
     // Если пауза включена, перекрашиваем строку в красный и добавляем текст
     if ($row['pause_status'] == 1) {
         $rowStyle = 'background: #ff4d4d;';
-        $pauseDisplay = 'На паузе';
+        $pauseDisplay = 'On pause';
     } else {
-        $pauseDisplay = 'Активно';
+        $pauseDisplay = 'Active';
     }
 
     $pauseHistoryQuery = $mysql->prepare("SELECT pause_time, resume_time FROM pause_history WHERE task_id = ?");
@@ -55,8 +55,8 @@ while ($row = $result->fetch_assoc()) {
     // Формируем строки для истории пауз
     $pauseHistoryDisplay = '';
     while ($historyRow = $pauseHistoryResult->fetch_assoc()) {
-        $resumeTime = $historyRow['resume_time'] ?? 'Текущая пауза';
-        $pauseHistoryDisplay .= "Пауза с {$historyRow['pause_time']} до {$resumeTime}<br>";
+        $resumeTime = $historyRow['resume_time'] ?? 'Current pause';
+        $pauseHistoryDisplay .= "Pause from{$historyRow['pause_time']} to {$resumeTime}<br>";
     }
 
     // Получаем первое и последнее время изменения статуса
@@ -106,14 +106,14 @@ while ($row = $result->fetch_assoc()) {
         $workerQuery->bind_param("i", $row['worker_id']);
         $workerQuery->execute();
         $workerResult = $workerQuery->get_result();
-        $workerName = $workerResult->fetch_assoc()['name'] ?? 'Неизвестно';
+        $workerName = $workerResult->fetch_assoc()['name'] ?? 'Unknown';
         echo "<td>{$workerName}</td>";
     } else {
-        echo "<td>Не назначен</td>";
+        echo "<td>Not assigned</td>";
     }
 
     // Статус и пауза
-    $statusDisplay = $statusText[$row['status']] ?? 'Неизвестный статус';
+    $statusDisplay = $statusText[$row['status']] ?? 'Unknown status';
     echo "<td>{$statusDisplay}</td>";
     //echo "<td>{$statusDisplay} ({$pauseDisplay})</td>";
 
@@ -129,10 +129,10 @@ while ($row = $result->fetch_assoc()) {
             echo "<option value='{$worker['id']}'>{$worker['id']} - {$worker['name']}</option>";
         }
         echo "</select>
-            <button onclick=\"assignWorker({$row['id']})\">Назначить</button>
+            <button onclick=\"assignWorker({$row['id']})\">Assign</button>
         </td>";
     } else {
-        echo "<td>⏳ В процессе</td>";
+        echo "<td>⏳ In the process</td>";
     }
     
     echo "<td>{$executionTime}</td>";
@@ -224,13 +224,13 @@ while ($row = $problemResult->fetch_assoc()) {
     }
 
     // Статус
-    echo "<td><b style='color: red;'>Проблемный (250)</b></td>";
+    echo "<td><b style='color: red;'>Problematic (250)</b></td>";
 
     // История пауз
     echo "<td>—</td>";
 
     // Действия
-    echo "<td><i>Требует проверки</i></td>";
+    echo "<td><i>Requires verification</i></td>";
 
     // Время выполнения / работы / дороги — пока не считаем
     echo "<td>—</td>";

@@ -52,9 +52,9 @@ $stmt = $conn->prepare($sql_insert);
 $stmt->bind_param("iisssis", $employee_id, $order_id, $date, $start_time, $end_time, $user_id, $type);
 
 if ($stmt->execute()) {
-    echo "Событие успешно сохранено!";
+    echo "The event was successfully saved!";
 } else {
-    echo "Ошибка при сохранении: " . $stmt->error;
+    echo "Error while saving: " . $stmt->error;
 }
 
 // Закрываем соединение

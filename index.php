@@ -12,7 +12,7 @@ if (isset($_COOKIE['user'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Balti24 - Вход и регистрация</title>
+    <title>Balti24 - Sign up</title>
     <link rel="stylesheet" href="stylelegacy.css">
 </head>
 <body>
@@ -21,12 +21,12 @@ if (isset($_COOKIE['user'])) {
         <div class="logo">Balti24</div>
         <nav class="nav">
             <ul>
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="about.html">О нас</a></li>
-                <li><a href="my_orders.php">Заказы</a></li>
-                <li class="me-3"><a href="user_order.php">Время моих заказов</a></li>
-                <li><a href="MainSite.php">Заполнить форму заказа</a></li>
-                <li><a href="contact.html">Контакты</a></li>
+                <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="my_orders.php">Orders</a></li>
+                    <li class="me-3"><a href="user_order.php">The time of my orders</a></li>
+                    <li><a href="MainSite.php">Fill out the order form</a></li>
+                    <li><a href="contact.html">Contacts</a></li>
             </ul>
         </nav>
     </div>
@@ -47,7 +47,7 @@ if (isset($_COOKIE['user'])) {
 
 <footer class="footer">
     <div class="container">
-        <p>&copy; 2025 Balti24. Все права защищены.</p>
+        <p>&copy; 2025 Balti24. All rights reserved.</p>
     </div>
 </footer>
 </body>

@@ -3,27 +3,27 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Выбор шаблона акта</title>
+  <title>Selecting an act template</title>
 </head>
 <body>
-  <h2>Выберите шаблон акта</h2>
+  <h2>Selecting an act template</h2>
   <form action="redirect_template.php" method="post">
     <label>
       <input type="radio" name="template" value="1" required>
-      Шаблон 1: Клиент оплатил на месте
+      Template 1: Customer paid on the spot
     </label><br>
 
     <label>
       <input type="radio" name="template" value="2">
-      Шаблон 2: Подтверждение через Smart-ID
+      Template 2: Confirmation via Smart-ID
     </label><br>
 
     <label>
       <input type="radio" name="template" value="3">
-      Шаблон 3: Фото документа с подписью
+      Template 3: Photo of document with signature
     </label><br><br>
 
-    <button type="submit">Продолжить</button>
+    <button type="submit">Continue</button>
   </form>
 </body>
 </html>

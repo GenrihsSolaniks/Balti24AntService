@@ -27,7 +27,7 @@ $completedResult = $completedStmt->get_result();
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Мои заказы - Balti24</title>
+  <title>My orders - Balti24</title>
   <link rel="stylesheet" href="stylelegacy.css">
 </head>
 <body>
@@ -36,26 +36,26 @@ $completedResult = $completedStmt->get_result();
             <div class="logo">Balti24</div>
             <nav class="nav">
                 <ul>
-                    <li><a href="index.html">Главная</a></li>
-                    <li><a href="about.html">О нас</a></li>
-                    <li><a href="my_orders.php">Заказы</a></li>
-                    <li class="me-3"><a href="user_order.php">Время моих заказов</a></li>
-                    <li><a href="MainSite.php">Заполнить форму заказа</a></li>
-                    <li><a href="contact.html">Контакты</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="my_orders.php">Orders</a></li>
+                    <li class="me-3"><a href="user_order.php">The time of my orders</a></li>
+                    <li><a href="MainSite.php">Fill out the order form</a></li>
+                    <li><a href="contact.html">Contacts</a></li>
                 </ul>
             </nav>
         </div>
 </header>
 <div class="container">
-    <h1>Активные заказы</h1>
+    <h1>Active orders</h1>
     <?php if ($result->num_rows > 0): ?>
         <table border="1" cellpadding="10" cellspacing="0">
             <tr>
                 <th>ID</th>
-                <th>Дата</th>
-                <th>Услуга</th>
-                <th>Город</th>
-                <th>Статус</th>
+                <th>Date</th>
+                <th>Service</th>
+                <th>City</th>
+                <th>Status</th>
             </tr>
             <?php while($row = $result->fetch_assoc()): ?>
                 <tr>
@@ -68,21 +68,21 @@ $completedResult = $completedStmt->get_result();
             <?php endwhile; ?>
         </table>
     <?php else: ?>
-        <p>У вас пока нет активных заказов.</p>
+        <p>You do not have any active orders yet.</p>
     <?php endif; ?>
 </div>
 
 
 <div class="container">
-    <h1>Завершенные заказы</h1>
+    <h1>Completed orders</h1>
     <?php if ($completedResult->num_rows > 0): ?>
         <table border="1" cellpadding="10" cellspacing="0">
             <tr>
                 <th>ID</th>
-                <th>Дата</th>
-                <th>Услуга</th>
-                <th>Город</th>
-                <th>Статус</th>
+                <th>Date</th>
+                <th>Service</th>
+                <th>City</th>
+                <th>Status</th>
             </tr>
             <?php while($row = $completedResult->fetch_assoc()): ?>
                 <tr>
@@ -95,13 +95,13 @@ $completedResult = $completedStmt->get_result();
             <?php endwhile; ?>
         </table>
     <?php else: ?>
-        <p>У вас пока нет завершённых заказов.</p>
+        <p>You don't have any completed orders yet.</p>
     <?php endif; ?>
 </div>
 
 <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Balti24. Все права защищены.</p>
+            <p>&copy; 2025 Balti24. All rights reserved.</p>
         </div>
     </footer>
 </body>

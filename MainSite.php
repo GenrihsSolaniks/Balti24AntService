@@ -10,7 +10,7 @@ if (!isset($_COOKIE['user'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Balti24 - Форма заказа</title>
+    <title>Balti24 - Order form</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="styleform.css">
 </head>
@@ -20,12 +20,12 @@ if (!isset($_COOKIE['user'])) {
             <div class="logo">Balti24</div>
             <nav class="nav">
                 <ul>
-                    <li><a href="index.html">Главная</a></li>
-                    <li><a href="about.html">О нас</a></li>
-                    <li><a href="my_orders.php">Заказы</a></li>
-                    <li class="me-3"><a href="user_order.php">Время моих заказов</a></li>
-                    <li><a href="MainSite.php">Заполнить форму заказа</a></li>
-                    <li><a href="contact.html">Контакты</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="my_orders.php">Orders</a></li>
+                    <li class="me-3"><a href="user_order.php">The time of my orders</a></li>
+                    <li><a href="MainSite.php">Fill out the order form</a></li>
+                    <li><a href="contact.html">Contacts</a></li>
                 </ul>
             </nav>
         </div>
@@ -46,7 +46,7 @@ if (!isset($_COOKIE['user'])) {
                 </div>
 
                 <div class="form-group mb-3">
-                    <p>Телефон в формате: +371 12345678</p>
+                    <p>Phone format: +371 12345678</p>
                     <input type="text" class="form-control" name="phone" id="phone" placeholder="Enter your phone nr." required>
                 </div>
 
@@ -74,7 +74,7 @@ if (!isset($_COOKIE['user'])) {
                 <div class="form-group mb-3">
                     <label for="date">Select an Available Date *</label>
                     <input id="date" type="date" name="date" class="form-control" required>
-                    <p id="date-warning" style="color: red; display: none;">Этот день уже занят! Выберите другой.</p>
+                    <p id="date-warning" style="color: red; display: none;">This day is already taken! Choose another.</p>
                 </div>
 
                 <div class="form-group mb-3">
@@ -111,7 +111,7 @@ if (!isset($_COOKIE['user'])) {
     </div>
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Balti24. Все права защищены.</p>
+            <p>&copy; 2025 Balti24. All rights reserved.</p>
         </div>
     </footer>
     <script>
@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 
                 // Если сервис не выбран - запрещаем выбор даты
                 if (!selectedService) {
-                    alert("Сначала выберите сферу работы!");
+                    alert("First, choose your area of work!");
                     this.value = "";
                     return;
                 }
@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
         })
-        .catch(error => console.error("Ошибка загрузки занятых дат:", error));
+        .catch(error => console.error("Error loading busy dates:", error));
 });
 </script>
 

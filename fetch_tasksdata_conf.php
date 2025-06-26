@@ -217,10 +217,10 @@ while ($row = $problemResult->fetch_assoc()) {
         $workerQuery->bind_param("i", $row['worker_id']);
         $workerQuery->execute();
         $workerResult = $workerQuery->get_result();
-        $workerName = $workerResult->fetch_assoc()['name'] ?? 'Неизвестно';
+        $workerName = $workerResult->fetch_assoc()['name'] ?? 'Unknown';
         echo "<td>{$workerName}</td>";
     } else {
-        echo "<td>Не назначен</td>";
+        echo "<td>Not assigned</td>";
     }
 
     // Статус

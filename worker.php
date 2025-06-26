@@ -19,10 +19,10 @@ if (!isset($_COOKIE['worker_id']) || empty($_COOKIE['worker_id'])) {
         <div class="logo">Balti24</div>
         <nav class="nav">
             <ul>
-                <li><a href=“worker.php”>Order table</a></li>
-                <li><a href=“worker_schedule.php”>My employment</a></li>
-                <li><a href=“workercomplete.php”>Completed orders</a></li>
-                <li><a href=“choose_template.php”>Generate an act</a></li>
+                <li><a href="worker.php">Order table</a></li>
+                <li><a href="worker_schedule.php">My employment</a></li>
+                <li><a href="workercomplete.php">Completed orders</a></li>
+                <li><a href="choose_template.php">Generate an act</a></li>
             </ul>
         </nav>
         <p class="text-center"><a href="exit_worker_conf.php" class="btn btn-link">Log out</a></p>
@@ -66,14 +66,14 @@ function rebuildActionButtons(orderId) {
     cell.innerHTML = '';
 
     const agreeBtn = document.createElement("button");
-    agreeBtn.textContent = "Клиент согласен";
+    agreeBtn.textContent = "Client agrees";
     agreeBtn.onclick = () => showConfirm(orderId);
 
     const br = document.createElement("br");
     const br2 = document.createElement("br");
 
     const rejectBtn = document.createElement("button");
-    rejectBtn.textContent = "Клиент не согласен";
+    rejectBtn.textContent = "Client rejects";
     rejectBtn.style.color = "red";
     rejectBtn.onclick = () => showRejectConfirm(orderId);
 
@@ -92,9 +92,9 @@ function showConfirm(orderId) {
     if (cell) {
         cell.innerHTML = `
             <div style="text-align:center;">
-                <p><b>Вы уверены?</b></p>
-                <button onclick="updateOrderStatus(${orderId}, 6)">Да</button>
-                <button onclick="cancelConfirm(${orderId})">Нет</button>
+                <p><b>You sure?</b></p>
+                <button onclick="updateOrderStatus(${orderId}, 6)">Yes</button>
+                <button onclick="cancelConfirm(${orderId})">No</button>
             </div>
         `;
     }

@@ -42,23 +42,23 @@ while ($row = $result->fetch_assoc()) {
     if ($row['status'] == 4) {
         if ($row['pause_status'] == 1) {
             // Если пауза активна, показываем кнопку "Снять паузу"
-            echo "<td><button onclick=\"togglePauseStatus({$row['id']})\">Снять паузу</button></td>";
+            echo "<td><button onclick=\"togglePauseStatus({$row['id']})\">Pause off</button></td>";
         } else {
             // Если пауза не активна, показываем две кнопки
             $nextStatus = $row['status'] + 1;
             echo "<td>
-                <button onclick=\"togglePauseStatus({$row['id']})\">Поставить на паузу</button>
+                <button onclick=\"togglePauseStatus({$row['id']})\">Pause on</button>
                 <button onclick=\"updateOrderStatus({$row['id']}, {$nextStatus})\">{$statusNames[$nextStatus]}</button>
             </td>";
         }
     } elseif ($row['status'] == 5) {
          echo "<td id='action-cell-{$row['id']}'>
-            <button class='agree-btn' data-id='{$row['id']}'>Клиент согласен</button><br><br>
-            <button class='reject-btn' data-id='{$row['id']}' style='color: red;'>Клиент не согласен</button>
+            <button class='agree-btn' data-id='{$row['id']}'>Client agree</button><br><br>
+            <button class='reject-btn' data-id='{$row['id']}' style='color: red;'>Client rejects</button>
         </td>";
     } elseif ($row['status'] == 6) {
         // Если статус 6 (Выехал обратно), показываем кнопку "Приехал на базу"
-        echo "<td><button onclick=\"updateOrderStatus({$row['id']}, 7)\">Задание выполнено</button></td>";
+        echo "<td><button onclick=\"updateOrderStatus({$row['id']}, 7)\">Task complete</button></td>";
     } elseif ($row['status'] < 7) {
         // Остальные переходы
         $nextStatus = $row['status'] + 1;
